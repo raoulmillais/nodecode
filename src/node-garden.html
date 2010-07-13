@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <!--[if IE]>
+    <script type="text/javascript>
+        window.location = 'http://upgradeyourbrowser.org/';
+    </script>
+    <![endif]-->
+    <title>Animated Ball</title>
+    <link href="css/main.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="js/src/Utils.js"></script>
+    <script type="text/javascript" src="js/src/Node.js"></script>
+    <script type="text/javascript" src="js/src/Stage.js"></script>
+    <script type="text/javascript" src="js/src/Color.js"></script>
+    <script type="text/javascript" src="js/src/NodeGarden.js"></script>
+</head>
+
+<body>
+    <header class="site">
+        <hgroup>
+            <h1>Node Garden</h1>
+        </hgroup>
+    </header>
+    <canvas id="tile-canvas" width="400" height="400">
+        <div>
+            Your browser does not support canvas
+        </div>
+    </canvas>
+
+    <script type="text/javascript">
+        var nodes = [],
+            initialNodeCount = 35,
+            nodeRedValue = 201,
+            nodeGreenValue = 255,
+            nodeBlueValue = 32,
+            nodeGarden;
+            
+        function $(id) { return document.getElementById(id); }
+            
+        document.addEventListener('DOMContentLoaded', function() {
+            var stage = Object.create(Stage);
+            stage.init({ canvasId: 'tile-canvas', drawCallback: processNodes, fps: 20, size: 400 });
+            
+            var nodeColor = Object.create(Color);
+            nodeColor.init(nodeRedValue, nodeGreenValue, nodeBlueValue);
+            
+            nodeGarden = Object.create(NodeGarden);
+            nodeGarden.init(35, nodeColor, stage);
+            nodeGarden.populate();
+            
+            stage.start();
+        }, false);
+        
+        function processNodes() {
+            this.clear();
+            for (var i = 0; i < nodeGarden.nodes.length - 1; i++) {
+                for (var j = i + 1; j < nodeGarden.nodes.length; j++) {
+                    var distance = nodeGarden.nodes[i].distance(nodeGarden.nodes[j]);
+                    if (distance < 120) {
+                        nodeGarden.nodes[i].color.alpha = 1 - (distance / 120);
+                        this.context.fillStyle = nodeGarden.nodes[i].color.toRGBAString();
+                        this.context.beginPath();                        
+                        
+                        this.context.arc(nodeGarden.nodes[i].x, nodeGarden.nodes[i].y, nodeGarden.nodes[i].size / 2, 0, Math.PI * 2, true);
+                        
+                        this.context.fill();
+                        
+                        this.context.strokeStyle = nodeGarden.nodes[i].color.toRGBAString();
+                        this.context.lineWidth = 4;
+                        this.context.beginPath();
+                        this.context.moveTo(nodeGarden.nodes[i].x, nodeGarden.nodes[i].y);
+                        this.context.lineTo(nodeGarden.nodes[j].x, nodeGarden.nodes[j].y);
+                        this.context.stroke();
+                    }
+                }
+            }
+            
+            for (var i = 0; i < nodeGarden.nodes.length; i++) {
+                nodeGarden.nodes[i].move(this.size);
+            }
+        }
+
+        </script>
+    
+</body>
+
+</html>

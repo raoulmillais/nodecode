@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <!--[if IE]>
+    <script type="text/javascript>
+        window.location = 'http://upgradeyourbrowser.org/';
+    </script>
+    <![endif]-->
+    <title>Animated Ball</title>
+    <link href="css/main.css" rel="stylesheet" type="text/css" />
+
+    <script type="text/javascript" src="js/src/Utils.js"></script>
+    <script type="text/javascript" src="js/src/Color.js"></script>
+    <script type="text/javascript" src="js/src/Stage.js"></script>
+    <script type="text/javascript" src="js/src/Easing.js"></script>
+    <script type="text/javascript" src="js/src/Animation.js"></script>
+</head>
+
+<body>
+    <header class="site">
+        <hgroup>
+            <h1>Test</h1>
+        </hgroup>
+    </header>
+    <canvas id="tile-canvas" width="400" height="400">
+        <div>
+            Your browser does not support canvas
+        </div>
+    </canvas>
+
+    <script type="text/javascript">
+        var ballAnimation,
+            stage,
+            ball = { 
+                x: 0, 
+                y: 200, 
+                size: 50,
+                draw: function(stage) {
+                    var radius = this.size / 2;
+                    stage.context.clearRect(0, 0, stage.size, stage.size);
+                    var color = Object.create(Color);
+                    color.init(25, 240, 252, 0.5);
+                    stage.context.strokeStyle = color.toRGBAString(25, 240, 252, 0.5);
+                    stage.context.beginPath();
+                    stage.context.arc(this.x - radius, this.y - radius, radius, 0, Math.PI * 2, true);
+                    stage.context.stroke();
+                }
+            };
+        
+           
+        document.addEventListener('DOMContentLoaded', function() {
+            stage = Object.create(Stage);
+            stage.init({ canvasId: 'tile-canvas', drawCallback: drawLoop, fps: 20, size: 400 });
+            
+            ballAnimation = Object.create(Animation);
+            ballAnimation.init(stage, 2000, 0, 300, ball, 'x', false, Easing.easeOutSine); 
+            
+            stage.start();
+            ballAnimation.start();
+        }, false);
+        
+        
+        function drawLoop() {
+            ball.draw(stage);
+            ballAnimation.advanceFrame();
+        }
+        
+    </script>
+    
+</body>
+
+</html>

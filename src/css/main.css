@@ -1,0 +1,46 @@
+/* BASIC: =Reset
+------------------------------------------------------- */
+/* force HTML5 elements to be displayed as block-level elements
+and standardise default styles across all browsers */
+article,aside,canvas,details,figcaption,figure,footer,header,hgroup,menu,nav,section,summary { display:block; }
+html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a, abbr, address, cite, code,
+del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,
+legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,figcaption,figure,
+footer,header,hgroup,menu,nav,section,summary { margin:0; padding:0; border:0; outline:0; vertical-align:baseline; background:transparent; }
+:focus { outline:none; }
+table { border-collapse:collapse; border-spacing:0; border:solid 2px transparent; }
+address,caption,cite,code,dfn,em,strong,th,var { font-style:normal; font-weight:normal; }
+ol,ul { list-style:none; }
+caption,th { text-align: left; }
+q:before,q:after { content:''; }
+abbr,acronym { border:0; }
+
+/* BASIC: =Fonts
+------------------------------------------------------- */
+@font-face { 
+    font-family: Lobster; 
+    src: local("Lobster"), 
+         url(../fonts/lobster.ttf) format("truetype");
+}
+
+body { background: #19191a; font-family:Helvetica,Verdana,Arial,sans-serif; font-size:14px; font-weight: bold; color: #656665; margin:0 20px; }
+
+canvas { border: 10px solid #252525;  width: 400px; }
+
+header.site h1 { font-family:"Lobster", arial, serif; font-size:40px; color: #c9ff20; margin: 10px 10px 0 10px; }
+header.site h2 { color: #656665; font-size: 16px; margin: 0 10px 10px 10px;}
+
+.control { border: 10px solid #252525;  width: 390px; height: 200px; overflow: auto; margin: 10px 0; padding: 5px;}
+.control p { clear: both; margin: 5px 0; overflow: auto; }
+label, #control-node-colour-label { display: block; width: 150px; float: left; padding-top: 2px;  }
+input { width: 50px; display: block; float: left; text-align: bottom; margin: 0 5px;  border: 2px solid #252525; text-align: center; font-family:Helvetica,Verdana,Arial,sans-serif; font-size:14px; background: #656665}
+input.update { width: 75px; }
+
+
+#control-node-colour { list-style-type: none; float: left; width: 150px; display: block; margin: 5px 0; }
+#control-node-colour li { display: block; float: left; width: 20px; height: 20px; border: 2px solid #252525; margin: 0 5px; cursor: pointer; }
+#control-node-colour li.selected { border: 2px solid #ccc; }
+#control-node-colour-cyan { background: #19f0fc; }
+#control-node-colour-lime { background: #c9ff20; }
+#control-node-colour-orange { background: #fc5a00; }
+#control-node-colour-purple { background: #f300fc; }
