@@ -32,15 +32,15 @@ header.site h2 { color: #656665; font-size: 16px; margin: 0 10px 10px 10px;}
 
 .control { border: 10px solid #252525;  width: 390px; height: 200px; overflow: auto; margin: 10px 0; padding: 5px;}
 .control p { clear: both; margin: 5px 0; overflow: auto; }
-label, #control-node-colour-label { display: block; width: 150px; float: left; padding-top: 2px;  }
+label, #control-stroke-colour-label { display: block; width: 150px; float: left; padding-top: 2px;  }
 input { width: 50px; display: block; float: left; text-align: bottom; margin: 0 5px;  border: 2px solid #252525; text-align: center; font-family:Helvetica,Verdana,Arial,sans-serif; font-size:14px; background: #656665}
 input.update { width: 75px; }
 
 
-#control-node-colour { list-style-type: none; float: left; width: 150px; display: block; margin: 5px 0; }
-#control-node-colour li { display: block; float: left; width: 20px; height: 20px; border: 2px solid #252525; margin: 0 5px; cursor: pointer; }
-#control-node-colour li.selected { border: 2px solid #ccc; }
-#control-node-colour-cyan { background: #19f0fc; }
-#control-node-colour-lime { background: #c9ff20; }
-#control-node-colour-orange { background: #fc5a00; }
-#control-node-colour-purple { background: #f300fc; }
+#control-stroke-colour { list-style-type: none; float: left; width: 150px; display: block; margin: 5px 0; }
+#control-stroke-colour li { display: block; float: left; width: 20px; height: 20px; border: 2px solid #252525; margin: 0 5px; cursor: pointer; }
+#control-stroke-colour li.selected { border: 2px solid #ccc; }
+#control-stroke-colour-cyan { background: #19f0fc; }
+#control-stroke-colour-lime { background: #c9ff20; }
+#control-stroke-colour-orange { background: #fc5a00; }
+#control-stroke-colour-purple { background: #f300fc; }

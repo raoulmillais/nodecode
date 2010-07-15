@@ -23,24 +23,34 @@
         },
         
         start: function() {
-            if (this.isRunning) return;
+            if (this.isRunning) return this;
+            
             this.isRunning = true;
             this.targetObject[this.targetProperty] = this.startValue;
+            
+            return this;
         },
         
         stop: function() {
-            if (!this.isRunning) return;
+            if (!this.isRunning) return this;
+            
             this.isRunning = false;
+            
+            return this;
         },
         
         reset: function() {
             if (this.isRunning) this.stop();
+            
             this.targetObject[this.targetProperty] = this.originalValue;
             this.currentFrame = 0;
+            
+            return this;
         },
         
         advanceFrame: function() {
-            if (!this.isRunning) return;
+            if (!this.isRunning) return this;
+            
             if (this.currentFrame == this.totalFrames) {
                 this.isRunning = false;
                 if (this.revertOnStop) {
@@ -50,6 +60,8 @@
                 this.targetObject[this.targetProperty] = this.easingFunction(this.currentFrame, this.startValue, this.endValue, this.totalFrames);
                 this.currentFrame++;
             }
+            
+            return this;
         }
     }
     
