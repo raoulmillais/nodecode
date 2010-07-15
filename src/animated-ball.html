@@ -54,77 +54,86 @@
     </div>
 
     <script type="text/javascript">
-        var nodeRedValue = 25,
-            nodeGreenValue = 240,
-            nodeBlueValue = 252,
-            stage;
-        
-           
-        document.addEventListener('DOMContentLoaded', function() {
-            var canvas = document.getElementById('tile-canvas');
-            canvas.addEventListener('click', addBall, false);
+        (function() {
+            var nodeRedValue = 25,
+                nodeGreenValue = 240,
+                nodeBlueValue = 252,
+                stage;
             
-            stage = Object.create(Stage);
-            stage.init('tile-canvas', 20, 400);
+               
+            document.addEventListener('DOMContentLoaded', function() {
+                stage = Object.create(Stage);
+                stage.init('tile-canvas', 20, 400);
+                
+                var color = Object.create(Color);
+                color.init(nodeRedValue, nodeGreenValue, 252, 0.5);
+                
+                var ball = Object.create(Circle);
+                ball.init(0, 200, 50, color);
+                
+                var ballAnimation = Object.create(Animation);
+                ballAnimation.init(stage, 2000, 0, 300, ball, 'x', false, Easing.easeOutSine); 
+                
+                stage.actors.push(ball);
+                stage.animations.push(ballAnimation);
+                stage.start();
+            }, false);
             
-            var color = Object.create(Color);
-            color.init(nodeRedValue, nodeGreenValue, 252, 0.5);
             
-            var ball = Object.create(Circle);
-            ball.init(0, 200, 50, color);
-            
-            var ballAnimation = Object.create(Animation);
-            ballAnimation.init(stage, 2000, 0, 300, ball, 'x', false, Easing.easeOutSine); 
-            
-            stage.actors.push(ball);
-            stage.animations.push(ballAnimation);
-            stage.start();
-        }, false);
-        
-        
-        
-        function addBall(evt) {
-            var newColor = Object.create(Color);
-            newColor.init(25, 240, 252, 0.5);
-            
-            var newBall = Object.create(Circle);
-            newBall.init(evt.clientX, evt.clientY, 50, newColor);
-            
-            var newBallAnimation = Object.create(Animation);
-            newBallAnimation.init(stage, 2000, evt.clientX, evt.clientX + 300, newBall, 'x', false, Easing.easeOutSine); 
+            $(document).ready(function() {
+                var $canvas = $('#tile-canvas');
+                console.log($canvas.offset().left + ',' + $canvas.offset().top);
+                $canvas.click(function(evt) {
+                    console.log('canvas clicked pageX,Y: ' + evt.pageX + ',' + evt.pageY);
+                    console.log('canvas clicked clientX,Y: ' + evt.clientX + ',' + evt.clientY);
+                    var newColor = Object.create(Color);
+                    newColor.init(25, 240, 252, 0.5);
+                    
+                    var newX = evt.pageX - $canvas.offset().left,
+                        newY = evt.pageY - $canvas.offset().top;
+                    
+                    var newBall = Object.create(Circle);
+                    newBall.init(newX, newY, 50, newColor);
+                    
+                    var newBallAnimation = Object.create(Animation);
+                    newBallAnimation.init(stage, 2000, newX, newX + 300, newBall, 'x', false, Easing.easeOutSine); 
 
-            stage.actors.push(newBall);
-            stage.animations.push(newBallAnimation);
-            newBallAnimation.start();
-        }
-        
-        $('#control-node-colour li').click(function() {
-            $('#control-node-colour li').removeClass('selected');
-            $(this).toggleClass('selected');
-            
-            switch (this.id) {
-                case 'control-node-colour-cyan':
-                    nodeRedValue = 25;
-                    nodeGreenValue = 240;
-                    nodeBlueValue = 252;
-                    break;
-                case 'control-node-colour-lime':
-                    nodeRedValue = 201;
-                    nodeGreenValue = 255;
-                    nodeBlueValue = 32;
-                    break;
-                case 'control-node-colour-orange':
-                    nodeRedValue = 252;
-                    nodeGreenValue = 90;
-                    nodeBlueValue = 0;
-                    break;
-                case 'control-node-colour-purple':
-                    nodeRedValue = 243;
-                    nodeGreenValue = 0;
-                    nodeBlueValue = 252;
-                    break;
-            }
-        });
+                    stage.actors.push(newBall);
+                    stage.animations.push(newBallAnimation);
+                    newBallAnimation.start();
+                
+                });
+                
+                
+                $('#control-node-colour li').click(function() {
+                    $('#control-node-colour li').removeClass('selected');
+                    $(this).toggleClass('selected');
+                    
+                    switch (this.id) {
+                        case 'control-node-colour-cyan':
+                            nodeRedValue = 25;
+                            nodeGreenValue = 240;
+                            nodeBlueValue = 252;
+                            break;
+                        case 'control-node-colour-lime':
+                            nodeRedValue = 201;
+                            nodeGreenValue = 255;
+                            nodeBlueValue = 32;
+                            break;
+                        case 'control-node-colour-orange':
+                            nodeRedValue = 252;
+                            nodeGreenValue = 90;
+                            nodeBlueValue = 0;
+                            break;
+                        case 'control-node-colour-purple':
+                            nodeRedValue = 243;
+                            nodeGreenValue = 0;
+                            nodeBlueValue = 252;
+                            break;
+                    }
+                });
+            });
+        })();
     </script>
     
 </body>
