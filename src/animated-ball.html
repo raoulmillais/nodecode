@@ -54,9 +54,9 @@
     </div>
 
     <script type="text/javascript">
-        var nodeRedValue,
-            nodeGreenValue,
-            nodeBlueValue,
+        var nodeRedValue = 25,
+            nodeGreenValue = 240,
+            nodeBlueValue = 252,
             stage;
         
            
@@ -65,10 +65,10 @@
             canvas.addEventListener('click', addBall, false);
             
             stage = Object.create(Stage);
-            stage.init({ canvasId: 'tile-canvas', fps: 20, size: 400 });
+            stage.init('tile-canvas', 20, 400);
             
             var color = Object.create(Color);
-            color.init(25, 240, 252, 0.5);
+            color.init(nodeRedValue, nodeGreenValue, 252, 0.5);
             
             var ball = Object.create(Circle);
             ball.init(0, 200, 50, color);

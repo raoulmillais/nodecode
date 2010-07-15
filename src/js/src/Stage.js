@@ -6,18 +6,19 @@
         
         actors: [],
         
-        init: function(options) {
-            var self = this, // capture reference to this in boundCallback closure
-                canvas = document.getElementById(options.canvasId);
+        init: function(canvasId, fps, size, 
+                    drawCallback /*optional*/) {
+            var self = this,
+                canvas = document.getElementById(canvasId);
                 
             if (!canvas.getContext) return;
             
-            options.drawCallback = options.drawCallback || this.draw;
+            drawCallback = drawCallback || this.draw;
 
-            this.fps = options.fps;
-            this.context = document.getElementById(options.canvasId).getContext('2d');
-            this.boundCallback = function() { options.drawCallback.call(self); };
-            this.size = options.size;
+            this.fps = fps;
+            this.context = canvas.getContext('2d');
+            this.boundCallback = function() { drawCallback.call(self); };
+            this.size = size;
         },
         
         start: function() {
