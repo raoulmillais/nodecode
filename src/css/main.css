@@ -32,7 +32,8 @@ header.site h2 { color: #656665; font-size: 16px; margin: 0 10px 10px 10px;}
 
 /* COMPONENT: =actors-pallette
 ------------------------------------------------------- */
-#actors-pallette, #properties-pallette { float: left; border: 10px solid #252525;  width: 150px; height: 200px; overflow: auto; margin: 0 10px; }
+#actors-pallette, #properties-pallette, #tools-pallette { float: left; border: 10px solid #252525;  width: 150px; height: 200px; overflow: auto; margin: 0 10px; }
+
 
 /* COMPONENT: =timeline-pallette
 ------------------------------------------------------- */

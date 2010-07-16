@@ -4,7 +4,9 @@
 //= require "../Animation"
 //= require "../Color"
 //= require "../Circle"
+
 //= require "../ColorPicker"
+//= require "../ShapeSelector"
 
 (function() {
        
@@ -12,34 +14,46 @@
         var $canvas = $('#tile-canvas'),
             $actors = $('#actors'),
             $strokeColorPicker = $('#control-stroke-colour'),
+            $shapeSelector = $('#shapes'),
             stage = Object.create(Stage);
             
         stage.init('tile-canvas', 20, 400);
         
         $canvas.click(function(evt) {
             var newColor = $strokeColorPicker.data('SelectedColor'),
-                newBall = Object.create(Circle),
+                newRect,
                 newBallAnimation = Object.create(Animation),
                 newX = evt.pageX - $canvas.offset().left,
                 newY = evt.pageY - $canvas.offset().top;
             
             
             // create a new ball and attach an animation
-            newBall.init(newX, newY, 50, newColor);
+            switch ($shapeSelector.data('SelectedShape')) {
+                case 'Circle':
+                    newRect = Object.create(Circle);
+                    newRect.init(newX, newY, 50, newColor);
+                    break;
+                case 'Rectangle':
+                    newRect = Object.create(Rectangle);
+                    newRect.init(newX, newY, 75, 50, newColor);
+                    break;
+            }
+           
             
-            newBallAnimation.init(stage, 2000, newX, newX + 300, newBall, 'x', false, Easing.easeOutSine); 
+            newBallAnimation.init(stage, 2000, newX, newX + 300, newRect, 'x', false, Easing.easeOutSine); 
 
             // add the new ball to the actors pallette
-            $actors.items('add', { name: 'Circle', obj: newBall }).chain();
+            $actors.items('add', { name: 'Circle', obj: newRect }).chain();
             
             // put the ball on the stage
-            stage.actors.push(newBall);
+            stage.actors.push(newRect);
             stage.animations.push(newBallAnimation);
-            newBall.draw(stage);
+            newRect.draw(stage);
             if (stage.isRunning) newBallAnimation.start();
         });
         
         $strokeColorPicker.colorPicker();
+        $shapeSelector.shapeSelector();
         $('#stage-start').click(function() { stage.start(); });
         $('#stage-stop').click(function() { stage.stop(); });
         $('#stage-rewind').click(function() { stage.rewind(); });

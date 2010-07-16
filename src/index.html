@@ -17,12 +17,14 @@
     <script type="text/javascript" src="js/src/Utils.js"></script>
     <script type="text/javascript" src="js/src/Color.js"></script>
     <script type="text/javascript" src="js/src/Circle.js"></script>
+    <script type="text/javascript" src="js/src/Rectangle.js"></script>
     <script type="text/javascript" src="js/src/Stage.js"></script>
     <script type="text/javascript" src="js/src/Easing.js"></script>
     <script type="text/javascript" src="js/src/Animation.js"></script>
 
     <script type="text/javascript" src="js/src/ui/Actor.js"></script>
     <script type="text/javascript" src="js/src/ui/ColorPicker.js"></script>
+    <script type="text/javascript" src="js/src/ui/ShapeSelector.js"></script>
     <script type="text/javascript" src="js/src/ui/Program.js"></script>
 </head>
 
@@ -50,11 +52,9 @@
         
     </div>
     
-
-    <div id="timeline-pallette">
-        <form>
+    <div id="tools-pallette">
             <div id="control-stroke-colour-section">
-                <span id="control-stroke-colour-label">Select Colour:</span>
+                <span id="control-stroke-colour-label">Stroke Colour:</span>
                 <ul id="control-stroke-colour">
                     <li id="control-stroke-colour-cyan">&nbsp;</li>
                     <li id="control-stroke-colour-orange">&nbsp;</li>
@@ -62,6 +62,17 @@
                     <li id="control-stroke-colour-lime" class="selected">&nbsp;</li>
                 </ul>
             </div>
+            <div id="shape-selector">
+                <span id="shape-selector-label">Shape:</span>
+                <ul id="shapes">
+                    <li id="shape-circle">Circle</li>
+                    <li id="shape-rectangle">Rectangle</li>
+                </ul>
+            </div>    
+    </div>
+
+    <div id="timeline-pallette">
+        <form>
             <p>
                 <label for="control-node-count">Stage:</label>
                 <input type="button" id="stage-start" value="Start" class="update" />
