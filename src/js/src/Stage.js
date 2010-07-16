@@ -19,9 +19,13 @@
             this.context = canvas.getContext('2d');
             this.boundCallback = function() { drawCallback.call(self); };
             this.size = size;
+            this.isRunning = false;
         },
         
         start: function() {
+            if (this.isRunning) return this;
+            this.isRunning = true;
+            
             if (this.context && this.boundCallback && !this.intervalId) {
                 this.intervalId = window.setInterval(this.boundCallback, 1000 / this.fps);
             }
@@ -34,6 +38,9 @@
         },
         
         stop: function() {
+            if (!this.isRunning) return this;
+            this.isRunning = false;
+            
             if (this.context && this.boundCallback && this.intervalId) {
                 window.clearInterval(this.intervalId);
                 this.intervalId = undefined;

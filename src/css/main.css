@@ -15,7 +15,7 @@ caption,th { text-align: left; }
 q:before,q:after { content:''; }
 abbr,acronym { border:0; }
 
-/* BASIC: =Fonts
+/* BASIC: =fonts
 ------------------------------------------------------- */
 @font-face { 
     font-family: Lobster; 
@@ -25,13 +25,19 @@ abbr,acronym { border:0; }
 
 body { background: #19191a; font-family:Helvetica,Verdana,Arial,sans-serif; font-size:14px; font-weight: bold; color: #656665; margin:0 20px; }
 
-canvas { border: 10px solid #252525;  width: 400px; }
+canvas { border: 10px solid #252525;  width: 400px; float: left; }
 
 header.site h1 { font-family:"Lobster", arial, serif; font-size:40px; color: #c9ff20; margin: 10px 10px 0 10px; }
 header.site h2 { color: #656665; font-size: 16px; margin: 0 10px 10px 10px;}
 
-.control { border: 10px solid #252525;  width: 390px; height: 200px; overflow: auto; margin: 10px 0; padding: 5px;}
-.control p { clear: both; margin: 5px 0; overflow: auto; }
+/* COMPONENT: =actors
+------------------------------------------------------- */
+#actors { float: left; border: 10px solid #252525;  width: 150px; height: 200px; overflow: auto; margin: 0 10px; }
+
+/* COMPONENT: =timeline
+------------------------------------------------------- */
+#timeline { clear: both; border: 10px solid #252525;  width: 390px; height: 200px; overflow: auto; margin: 10px 0; padding: 5px;}
+#timeline p { clear: both; margin: 5px 0; overflow: auto; }
 label, #control-stroke-colour-label { display: block; width: 150px; float: left; padding-top: 2px;  }
 input { width: 50px; display: block; float: left; text-align: bottom; margin: 0 5px;  border: 2px solid #252525; text-align: center; font-family:Helvetica,Verdana,Arial,sans-serif; font-size:14px; background: #656665}
 input.update { width: 75px; }
