@@ -21,6 +21,7 @@
         
         $canvas.click(function(evt) {
             var newColor = $strokeColorPicker.data('SelectedColor'),
+                selectedShape = $shapeSelector.data('SelectedShape'),
                 newRect,
                 newBallAnimation = Object.create(Animation),
                 newX = evt.pageX - $canvas.offset().left,
@@ -28,7 +29,7 @@
             
             
             // create a new ball and attach an animation
-            switch ($shapeSelector.data('SelectedShape')) {
+            switch (selectedShape) {
                 case 'Circle':
                     newRect = Object.create(Circle);
                     newRect.init(newX, newY, 50, newColor);
@@ -43,7 +44,7 @@
             newBallAnimation.init(stage, 2000, newX, newX + 300, newRect, 'x', false, Easing.easeOutSine); 
 
             // add the new ball to the actors pallette
-            $actors.items('add', { name: 'Circle', obj: newRect }).chain();
+            $actors.items('add', { name: selectedShape, obj: newRect }).chain();
             
             // put the ball on the stage
             stage.actors.push(newRect);
