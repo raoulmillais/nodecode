@@ -12,6 +12,7 @@
     <link href="css/main.css" rel="stylesheet" type="text/css" />
 
     <script type="text/javascript" src="js/lib/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="js/lib/chain.js"></script>
     
     <script type="text/javascript" src="js/src/Utils.js"></script>
     <script type="text/javascript" src="js/src/Color.js"></script>
@@ -19,6 +20,9 @@
     <script type="text/javascript" src="js/src/Stage.js"></script>
     <script type="text/javascript" src="js/src/Easing.js"></script>
     <script type="text/javascript" src="js/src/Animation.js"></script>
+
+    <script type="text/javascript" src="js/src/ui/Actor.js"></script>
+    <script type="text/javascript" src="js/src/ui/Program.js"></script>
 </head>
 
 <body>
@@ -35,8 +39,8 @@
     
     <div id="actors">
         <h3>Actors</h3>
-        <ul>
-            <li class="actor"></li>
+        <ul id="actors-container">
+            <li class="item"><span class="name"></span></li>
         </ul>
     </div>
 
@@ -59,86 +63,6 @@
             </p>
         </form>
     </div>
-
-    <script type="text/javascript">
-        (function() {
-               
-            $(document).ready(function() {
-                var $canvas = $('#tile-canvas'),
-                    nodeRedValue = 25,
-                    nodeGreenValue = 240,
-                    nodeBlueValue = 252,
-                    stage = Object.create(Stage);
-                    color = Object.create(Color),
-                    ball = Object.create(Circle),
-                    ballAnimation = Object.create(Animation);
-                    
-                stage.init('tile-canvas', 20, 400);
-                // export the stage for debugging
-                window.stage = stage;
-                
-                color.init(nodeRedValue, nodeGreenValue, 252, 0.5);
-                ball.init(0, 200, 50, color);
-                ballAnimation.init(stage, 2000, 0, 300, ball, 'x', false, Easing.easeOutSine); 
-                
-                stage.actors.push(ball);
-                stage.animations.push(ballAnimation);
-                stage.draw();
-
-                $canvas.click(function(evt) {
-                    var newColor = Object.create(Color),
-                        newBall = Object.create(Circle),
-                        newBallAnimation = Object.create(Animation),
-                        newX = evt.pageX - $canvas.offset().left,
-                        newY = evt.pageY - $canvas.offset().top;
-                    
-                    newColor.init(nodeRedValue, nodeGreenValue, nodeBlueValue, 0.5);
-                    newBall.init(newX, newY, 50, newColor);
-                    
-                    newBallAnimation.init(stage, 2000, newX, newX + 300, newBall, 'x', false, Easing.easeOutSine); 
-
-                    stage.actors.push(newBall);
-                    stage.animations.push(newBallAnimation);
-                    newBall.draw(stage);
-                    if (stage.isRunning) newBallAnimation.start();
-                });
-                
-                
-                $('#control-stroke-colour li').click(function() {
-                    $('#control-stroke-colour li').removeClass('selected');
-                    $(this).toggleClass('selected');
-                    
-                    switch (this.id) {
-                        case 'control-stroke-colour-cyan':
-                            nodeRedValue = 25;
-                            nodeGreenValue = 240;
-                            nodeBlueValue = 252;
-                            break;
-                        case 'control-stroke-colour-lime':
-                            nodeRedValue = 201;
-                            nodeGreenValue = 255;
-                            nodeBlueValue = 32;
-                            break;
-                        case 'control-stroke-colour-orange':
-                            nodeRedValue = 252;
-                            nodeGreenValue = 90;
-                            nodeBlueValue = 0;
-                            break;
-                        case 'control-stroke-colour-purple':
-                            nodeRedValue = 243;
-                            nodeGreenValue = 0;
-                            nodeBlueValue = 252;
-                            break;
-                    }
-                });
-                
-                $('#stage-start').click(function() { stage.start(); });
-                $('#stage-stop').click(function() { stage.stop(); });
-                $('#stage-rewind').click(function() { stage.rewind(); });
-            });
-        })();
-    </script>
-    
 </body>
 
 </html>

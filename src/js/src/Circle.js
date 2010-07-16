@@ -1,4 +1,4 @@
-//= require "Color.js"
+//= require "Color"
 
 (function() {
     
