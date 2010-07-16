@@ -46,6 +46,14 @@
             return this;
         },
         
+        rewind: function() {
+            this.stop();
+            for (var j = 0, m = this.animations.length; j < m; j++) {
+                this.animations[j].reset(true);
+            }
+            this.draw();
+        },
+        
         clear: function() {
             if (!this.context) return this;
             

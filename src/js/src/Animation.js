@@ -39,10 +39,10 @@
             return this;
         },
         
-        reset: function() {
+        reset: function(rewind) {
             if (this.isRunning) this.stop();
             
-            this.targetObject[this.targetProperty] = this.originalValue;
+            this.targetObject[this.targetProperty] = (rewind) ? this.startValue : this.originalValue;
             this.currentFrame = 0;
             
             return this;
