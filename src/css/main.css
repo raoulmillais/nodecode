@@ -44,6 +44,9 @@ input { width: 50px; display: block; float: left; text-align: bottom; margin: 0 
 input.update { width: 75px; }
 #stage-time { width: 120px; }
 
+#shapes li, #actors li { cursor: pointer; }
+#shapes li.selected, #actors li.selected { background-color: #252525; color: #19191a; }
+
 #control-stroke-colour { list-style-type: none; float: left; width: 150px; display: block; margin: 5px 0; }
 #control-stroke-colour li { display: block; float: left; width: 20px; height: 20px; border: 2px solid #252525; margin: 0 5px; cursor: pointer; }
 #control-stroke-colour li.selected { border: 2px solid #ccc; }

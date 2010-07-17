@@ -18,7 +18,7 @@
             stage = Object.create(Stage);
             
         stage.init('tile-canvas', 20, 400, function() {
-            var newMinutes = Math.floor(this.time / 60000) /* 1000 x 60*/,
+            var newMinutes = Math.floor(this.time / 60000),
                 newSeconds = Math.floor((this.time - (newMinutes * 60000)) / 1000),
                 newMilliseconds = this.time - ((newSeconds * 1000) + (newMinutes * 60000));
             
@@ -26,6 +26,18 @@
         });
         
         window.stage = stage;
+        
+        $('#actors').items([]).chain(function() {
+            var model = this.item();
+
+            $(this).click(function() {
+                var $self = $(this);
+                $('#actors li').removeClass('selected');
+                $self.toggleClass('selected');
+                $('#properties').propertiesEditor(model.obj);
+            });
+        });
+        
         
         $canvas.click(function(evt) {
             var newColor = $strokeColorPicker.data('SelectedColor'),
@@ -61,6 +73,7 @@
             if (stage.isRunning) newShapeAnimation.start();
         });
         
+       
         $strokeColorPicker.colorPicker();
         $shapeSelector.shapeSelector();
         $('#stage-start').click(function() { stage.start(); });
@@ -69,5 +82,6 @@
             stage.rewind(); 
             $('#stage-time').val('0m 0s 0ms');
         });
+        $('#stage-refresh').click(function() { stage.draw(); });
     });
 })();

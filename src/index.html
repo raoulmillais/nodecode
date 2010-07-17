@@ -24,6 +24,7 @@
 
     <script type="text/javascript" src="js/src/ui/Actor.js"></script>
     <script type="text/javascript" src="js/src/ui/ColorPicker.js"></script>
+    <script type="text/javascript" src="js/src/ui/PropertiesEditor.js"></script>
     <script type="text/javascript" src="js/src/ui/ShapeSelector.js"></script>
     <script type="text/javascript" src="js/src/ui/Program.js"></script>
 </head>
@@ -49,7 +50,7 @@
     
     <div id="properties-pallette">
         <h3>Properties</h3>
-        
+        <div id="properties"></div>
     </div>
     
     <div id="tools-pallette">
@@ -79,6 +80,9 @@
                 <input type="button" id="stage-stop" value="Stop" class="update" />
                 <input type="button" id="stage-rewind" value="Rewind" class="update" />
                 <input type="text" id="stage-time" value="0m 0s 0ms" class="update" readonly="true" />
+            </p>
+            <p>
+                <input type="button" id="stage-refresh" value="Refresh" class="update" />
             </p>
         </form>
     </div>
