@@ -9,7 +9,7 @@
 //= require "../ShapeSelector"
 
 (function() {
-       
+    
     $(document).ready(function() {
         var $canvas = $('#tile-canvas'),
             $actors = $('#actors'),
@@ -17,13 +17,21 @@
             $shapeSelector = $('#shapes'),
             stage = Object.create(Stage);
             
-        stage.init('tile-canvas', 20, 400);
+        stage.init('tile-canvas', 20, 400, function() {
+            var newMinutes = Math.floor(this.time / 60000) /* 1000 x 60*/,
+                newSeconds = Math.floor((this.time - (newMinutes * 60000)) / 1000),
+                newMilliseconds = this.time - ((newSeconds * 1000) + (newMinutes * 60000));
+            
+            $('#stage-time').val(newMinutes + 'm ' + newSeconds + 's ' + newMilliseconds + 'ms');
+        });
+        
+        window.stage = stage;
         
         $canvas.click(function(evt) {
             var newColor = $strokeColorPicker.data('SelectedColor'),
                 selectedShape = $shapeSelector.data('SelectedShape'),
-                newRect,
-                newBallAnimation = Object.create(Animation),
+                newShape,
+                newShapeAnimation = Object.create(Animation),
                 newX = evt.pageX - $canvas.offset().left,
                 newY = evt.pageY - $canvas.offset().top;
             
@@ -31,32 +39,35 @@
             // create a new ball and attach an animation
             switch (selectedShape) {
                 case 'Circle':
-                    newRect = Object.create(Circle);
-                    newRect.init(newX, newY, 50, newColor);
+                    newShape = Object.create(Circle);
+                    newShape.init(newX, newY, 50, newColor);
                     break;
                 case 'Rectangle':
-                    newRect = Object.create(Rectangle);
-                    newRect.init(newX, newY, 75, 50, newColor);
+                    newShape = Object.create(Rectangle);
+                    newShape.init(newX, newY, 75, 50, newColor);
                     break;
             }
            
             
-            newBallAnimation.init(stage, 2000, newX, newX + 300, newRect, 'x', false, Easing.easeOutSine); 
+            newShapeAnimation.init(stage, 2000, newX, newX + 300, newShape, 'x', false, Easing.easeOutSine); 
 
             // add the new ball to the actors pallette
-            $actors.items('add', { name: selectedShape, obj: newRect }).chain();
+            $actors.items('add', { name: selectedShape, obj: newShape }).chain();
             
             // put the ball on the stage
-            stage.actors.push(newRect);
-            stage.animations.push(newBallAnimation);
-            newRect.draw(stage);
-            if (stage.isRunning) newBallAnimation.start();
+            stage.actors.push(newShape);
+            stage.animations.push(newShapeAnimation);
+            newShape.draw(stage);
+            if (stage.isRunning) newShapeAnimation.start();
         });
         
         $strokeColorPicker.colorPicker();
         $shapeSelector.shapeSelector();
         $('#stage-start').click(function() { stage.start(); });
         $('#stage-stop').click(function() { stage.stop(); });
-        $('#stage-rewind').click(function() { stage.rewind(); });
+        $('#stage-rewind').click(function() { 
+            stage.rewind(); 
+            $('#stage-time').val('0m 0s 0ms');
+        });
     });
 })();

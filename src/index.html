@@ -66,18 +66,19 @@
                 <span id="shape-selector-label">Shape:</span>
                 <ul id="shapes">
                     <li id="shape-circle">Circle</li>
-                    <li id="shape-rectangle">Rectangle</li>
+                    <li id="shape-rectangle" class="selected">Rectangle</li>
                 </ul>
             </div>    
     </div>
 
     <div id="timeline-pallette">
         <form>
+            <h3>Timeline</h3>
             <p>
-                <label for="control-node-count">Stage:</label>
                 <input type="button" id="stage-start" value="Start" class="update" />
                 <input type="button" id="stage-stop" value="Stop" class="update" />
                 <input type="button" id="stage-rewind" value="Rewind" class="update" />
+                <input type="text" id="stage-time" value="0m 0s 0ms" class="update" readonly="true" />
             </p>
         </form>
     </div>

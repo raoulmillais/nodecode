@@ -7,19 +7,22 @@
         actors: [],
         
         init: function(canvasId, fps, size, 
-                    drawCallback /*optional*/) {
+                    onDraw /*optional*/) {
             var self = this,
                 canvas = document.getElementById(canvasId);
                 
             if (!canvas.getContext) return;
             
-            drawCallback = drawCallback || this.draw;
-
             this.fps = fps;
             this.context = canvas.getContext('2d');
-            this.boundCallback = function() { drawCallback.call(self); };
+            this.boundCallback = function() { 
+                self.draw.call(self); 
+                if (onDraw) 
+                    onDraw.call(self); 
+            };
             this.size = size;
             this.isRunning = false;
+            this.time = 0;
         },
         
         start: function() {
@@ -58,6 +61,7 @@
             for (var j = 0, m = this.animations.length; j < m; j++) {
                 this.animations[j].reset(true);
             }
+            this.time = 0;
             this.draw();
         },
         
@@ -79,6 +83,7 @@
                 this.animations[j].advanceFrame();
             }
             
+            this.time += 1000 / this.fps;
             return this;
         }
         

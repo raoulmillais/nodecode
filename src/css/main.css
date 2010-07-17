@@ -42,7 +42,7 @@ header.site h2 { color: #656665; font-size: 16px; margin: 0 10px 10px 10px;}
 label, #control-stroke-colour-label { display: block; width: 150px; float: left; padding-top: 2px;  }
 input { width: 50px; display: block; float: left; text-align: bottom; margin: 0 5px;  border: 2px solid #252525; text-align: center; font-family:Helvetica,Verdana,Arial,sans-serif; font-size:14px; background: #656665}
 input.update { width: 75px; }
-
+#stage-time { width: 120px; }
 
 #control-stroke-colour { list-style-type: none; float: left; width: 150px; display: block; margin: 5px 0; }
 #control-stroke-colour li { display: block; float: left; width: 20px; height: 20px; border: 2px solid #252525; margin: 0 5px; cursor: pointer; }
