@@ -40,6 +40,22 @@ header.site h2 { color: #656665; font-size: 16px; margin: 0 10px 10px 10px;}
 .palette { border: 10px solid #252525; padding: 2px; margin: 0 10px; }
 .palette h3 { background: #252525; margin: 0 0 5px 0; padding: 5px; font-size: 11px; font-weight: bold; }
 .palette h4 { font-size: 11px; }
+.palette .content { overflow: hidden; width: 150px; height: 170px; }
+
+/* COMPONENT: =jScrollPane
+------------------------------------------------------- */
+.jScrollPaneContainer { position: relative; overflow: hidden; z-index: 1; }
+.jScrollPaneTrack { position: absolute; cursor: pointer; right: 0; top: 0; height: 100%; background: #252525; -webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px;}
+.jScrollPaneDrag { position: absolute; background: #666; cursor: pointer; overflow: hidden; -webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px; }
+.jScrollPaneDragTop { position: absolute; top: 0; left: 0; overflow: hidden; }
+.jScrollPaneDragBottom { position: absolute; bottom: 0; left: 0; overflow: hidden;}
+a.jScrollArrowUp { display: block; position: absolute; z-index: 1; top: 0; right: 0; text-indent: -2000px; overflow: hidden; /*background-color: #666;*/ height: 9px;}
+a.jScrollArrowUp:hover { /*background-color: #f60;*/}
+a.jScrollArrowDown { display: block; position: absolute; z-index: 1; bottom: 0; right: 0; text-indent: -2000px; overflow: hidden; /*background-color: #666;*/ height: 9px;}
+a.jScrollArrowDown:hover { /*background-color: #f60;*/}
+a.jScrollActiveArrowButton, 
+a.jScrollActiveArrowButton:hover { /*background-color: #f00;*/}        
+
 
 /* COMPONENT: =actors-palette
 ------------------------------------------------------- */

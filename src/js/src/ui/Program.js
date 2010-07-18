@@ -73,6 +73,12 @@
 
             // add the new ball to the actors palette
             $actors.items('add', { name: selectedShape, obj: newShape }).chain();
+            // re-initalise scrollbars
+            $('.palette .content').jScrollPane({
+                scrollbarWidth: 5,
+                scrollbarMargin: 5,
+                showArrows: false
+            });
             
             // put the ball on the stage
             stage.actors.push(newShape);
@@ -80,7 +86,13 @@
             newShape.draw(stage);
             if (stage.isRunning) newShapeAnimation.start();
         });
-       
+        
+        $('.palette .content').jScrollPane({
+            scrollbarWidth: 5,
+            scrollbarMargin: 5,
+            showArrows: false
+        });
+        
         $('.color-picker').colorPicker();
         $shapeSelector.shapeSelector();
         $('#stage-start').click(function() { stage.start(); });

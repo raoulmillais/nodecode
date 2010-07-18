@@ -3,25 +3,77 @@
 <html lang="en">
 
 <head>
-    <title>jQuery Chain Demo</title>
+    <title>Scratchpad</title>
     <link type="text/css" rel="stylesheet" media="screen" href="css/main.css" />
     
     <script type="text/javascript" src="js/lib/jquery-1.4.2.min.js"></script>
-    <script type="text/javascript" src="js/lib/chain.js"></script>
+    <script type="text/javascript" src="js/lib/jScrollPane-1.2.3.min.js"></script>
+    <script type="text/javascript" src="js/lib/jquery.mousewheel.js"></script>
+    <script type="text/javascript" src="js/lib/chain.js"></script>7
+    <style type="text/css">
+        #navigation { position: relative; width: 200px; height: 100px; background: #252525; top: 0; right: 0; }
+        #content { height: 2000px; width: 1000px; }
+        
+        .palette .content { overflow: hidden; width: 150px; height: 170px; }
+        
+        .jScrollPaneContainer { position: relative; overflow: hidden; z-index: 1; }
+        .jScrollPaneTrack { position: absolute; cursor: pointer; right: 0; top: 0; height: 100%; background: #252525; -webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px;}
+        .jScrollPaneDrag { position: absolute; background: #666; cursor: pointer; overflow: hidden; -webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px; }
+        .jScrollPaneDragTop { position: absolute; top: 0; left: 0; overflow: hidden; }
+        .jScrollPaneDragBottom { position: absolute; bottom: 0; left: 0; overflow: hidden;}
+        a.jScrollArrowUp { display: block; position: absolute; z-index: 1; top: 0; right: 0; text-indent: -2000px; overflow: hidden; /*background-color: #666;*/ height: 9px;}
+        a.jScrollArrowUp:hover { /*background-color: #f60;*/}
+        a.jScrollArrowDown { display: block; position: absolute; z-index: 1; bottom: 0; right: 0; text-indent: -2000px; overflow: hidden; /*background-color: #666;*/ height: 9px;}
+        a.jScrollArrowDown:hover { /*background-color: #f60;*/}
+        a.jScrollActiveArrowButton, 
+        a.jScrollActiveArrowButton:hover { /*background-color: #f00;*/}        
+        
+    </style>
 </head>
 
 <body>
-    <header>
-        <hgroup>
-            <h1>Chain Demo</h1>
-        </hgroup>
-    </header>
-    
-    <div id="bindable">
-        <div class="x"></div>
-        <div class="y"></div>
-        <div class="radius"></div>
+    <div id="content">
+        <header>
+            <hgroup>
+                <h1>Chain Demo</h1>
+            </hgroup>
+        </header>
+        
+        <div id="navigation">
+         Navigation
+        </div>
+        
+
+        <div id="bindable">
+            <div class="x"></div>
+            <div class="y"></div>
+            <div class="radius"></div>
+        </div>
+        
+        <div id="palette" class="slim palette" style="float: none;">
+            <h3>Test</h3>
+            <div class="content">
+                <ul>
+                    <li>Item</li>
+                    <li>Item</li>
+                    <li>Item</li>
+                    <li>Item</li>
+                    <li>Item</li>
+                    <li>Item</li>
+                    <li>Item</li>
+                    <li>Item</li>
+                    <li>Item</li>
+                    <li>Item</li>
+                    <li>Item</li>
+                    <li>Item</li>
+                    <li>Item</li>
+                    <li>Item</li>
+                    <li>Item</li>
+                </ul>
+            </div>
+        </div>
     </div>
+    
     
     <script type="text/javascript">
         $(document).ready(function() {
@@ -29,8 +81,14 @@
             var data = { x: 0, y: 10, radius: 50 };
             
             $('#bindable').item(data).chain();
-        
-        });
+            
+            $('.palette .content').jScrollPane({
+                scrollbarWidth: 5,
+                scrollbarMargin: 5,
+                showArrows: false
+            });
+
+       });
     </script>
 
 </body>
