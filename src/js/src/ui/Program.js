@@ -13,7 +13,8 @@
     $(document).ready(function() {
         var $canvas = $('#tile-canvas'),
             $actors = $('#actors'),
-            $strokeColorPicker = $('#control-stroke-colour'),
+            $strokeColorPicker = $('#stroke-color'),
+            $fillColorPicker = $('#fill-color'),
             $shapeSelector = $('#shapes'),
             stage = Object.create(Stage),
             redrawStage;
@@ -46,28 +47,26 @@
             });
         });
         
-        
         $canvas.click(function(evt) {
-            var newColor = $strokeColorPicker.data('SelectedColor'),
+            var strokeColor = $strokeColorPicker.data('SelectedColor'),
+                fillColor = $fillColorPicker.data('SelectedColor'),
                 selectedShape = $shapeSelector.data('SelectedShape'),
                 newShape,
                 newShapeAnimation = Object.create(Animation),
                 newX = evt.pageX - $canvas.offset().left,
                 newY = evt.pageY - $canvas.offset().top;
             
-            
             // create a new ball and attach an animation
             switch (selectedShape) {
                 case 'Circle':
                     newShape = Object.create(Circle);
-                    newShape.init(newX, newY, 50, newColor);
+                    newShape.init(newX, newY, 50, { stroke: strokeColor, fill: fillColor });
                     break;
                 case 'Rectangle':
                     newShape = Object.create(Rectangle);
-                    newShape.init(newX, newY, 75, 50, newColor);
+                    newShape.init(newX, newY, 75, 50, { stroke: strokeColor, fill: fillColor });
                     break;
             }
-           
             
             newShapeAnimation.init(stage, 2000, newX, newX + 300, newShape, 'x', false, Easing.easeOutSine); 
 
@@ -80,9 +79,9 @@
             newShape.draw(stage);
             if (stage.isRunning) newShapeAnimation.start();
         });
-        
        
         $strokeColorPicker.colorPicker();
+        $fillColorPicker.colorPicker();
         $shapeSelector.shapeSelector();
         $('#stage-start').click(function() { stage.start(); });
         $('#stage-stop').click(function() { stage.stop(); });

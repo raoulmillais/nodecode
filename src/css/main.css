@@ -47,7 +47,7 @@ label.property-label { display: inline; width: 84px; }
 ------------------------------------------------------- */
 #timeline-pallette { clear: both; width: 396px; height: 200px; overflow: auto; margin: 10px 0; }
 #timeline-pallette p { clear: both; margin: 5px 0; overflow: auto; }
-label, #control-stroke-colour-label { display: block; width: 150px; float: left; padding-top: 2px;  }
+label, .color-picker-label { display: block; width: 150px; float: left; padding-top: 2px;  }
 input { width: 50px; display: block; float: left; text-align: bottom; margin: 0 5px;  border: 2px solid #252525; text-align: center; font-family:Helvetica,Verdana,Arial,sans-serif; font-size:14px; background: #656665}
 input.update { width: 75px; }
 #stage-time { width: 120px; }
@@ -55,10 +55,10 @@ input.update { width: 75px; }
 #shapes li, #actors li { cursor: pointer; }
 #shapes li.selected, #actors li.selected { background-color: #252525; color: #19191a; }
 
-#control-stroke-colour { list-style-type: none; float: left; width: 150px; display: block; margin: 5px 0; }
-#control-stroke-colour li { display: block; float: left; width: 20px; height: 20px; border: 2px solid #252525; margin: 0 5px; cursor: pointer; }
-#control-stroke-colour li.selected { border: 2px solid #ccc; }
-#control-stroke-colour-cyan { background: #19f0fc; }
-#control-stroke-colour-lime { background: #c9ff20; }
-#control-stroke-colour-orange { background: #fc5a00; }
-#control-stroke-colour-purple { background: #f300fc; }
+.color-picker { list-style-type: none; float: left; width: 150px; display: block; margin: 5px 0; }
+.color-picker li { display: block; float: left; width: 20px; height: 20px; border: 2px solid #252525; margin: 0 5px; cursor: pointer; }
+.color-picker li.selected { border: 2px solid #ccc; }
+.color-picker li.cyan { background: #19f0fc; }
+.color-picker li.lime { background: #c9ff20; }
+.color-picker li.orange { background: #fc5a00; }
+.color-picker li.purple { background: #f300fc; }

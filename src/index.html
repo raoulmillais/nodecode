@@ -8,7 +8,7 @@
         window.location = 'http://upgradeyourbrowser.org/';
     </script>
     <![endif]-->
-    <title>Animated Ball</title>
+    <title>Canvas IDE</title>
     <link href="css/main.css" rel="stylesheet" type="text/css" />
 
     <script type="text/javascript" src="js/lib/jquery-1.4.2.min.js"></script>
@@ -54,20 +54,30 @@
     
     <div id="tools-pallette" class="slim pallette">
         <h3>Tools</h3>
-            <div id="control-stroke-colour-section">
-                <ul id="control-stroke-colour">
-                    <li id="control-stroke-colour-cyan">&nbsp;</li>
-                    <li id="control-stroke-colour-orange">&nbsp;</li>
-                    <li id="control-stroke-colour-purple">&nbsp;</li>
-                    <li id="control-stroke-colour-lime" class="selected">&nbsp;</li>
-                </ul>
-            </div>
-            <div id="shape-selector">
-                <ul id="shapes">
-                    <li id="shape-circle">Circle</li>
-                    <li id="shape-rectangle" class="selected">Rectangle</li>
-                </ul>
-            </div>    
+        <div id="shape-selector">
+            <ul id="shapes">
+                <li id="shape-circle">Circle</li>
+                <li id="shape-rectangle" class="selected">Rectangle</li>
+            </ul>
+        </div>    
+    </div>
+    
+    <div id="style-pallette" class="slim pallette">
+        <h3>Style</h3>
+        <h4>Stroke</h4>
+        <ul id="stroke-color" class="color-picker">
+            <li class="cyan">&nbsp;</li>
+            <li class="orange">&nbsp;</li>
+            <li class="purple">&nbsp;</li>
+            <li class="lime selected">&nbsp;</li>
+        </ul>
+        <h4>Fill</h4>
+        <ul id="fill-color" class="color-picker">
+            <li class="cyan">&nbsp;</li>
+            <li class="orange">&nbsp;</li>
+            <li class="purple">&nbsp;</li>
+            <li class="lime selected">&nbsp;</li>
+        </ul>
     </div>
 
     <div id="timeline-pallette" class="pallette">

@@ -1,7 +1,6 @@
 Immediate
 ---------
 
-# Remove Color property from shapes and refactor into separate style object to aggregate painting styles
 # Create class to represent drawing surface, encapsulating stage
 # Create controller to coordinate communication between widgets
 
