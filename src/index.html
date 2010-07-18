@@ -41,18 +41,18 @@
         </div>
     </canvas>
     
-    <div id="actors-pallette" class="slim pallette">
+    <div id="actors-palette" class="slim palette">
         <h3>Actors</h3>
         <ul id="actors">
             <li class="item"><span class="name"></span></li>
         </ul>
     </div>
     
-    <div id="properties-pallette" class="slim pallette">
+    <div id="properties-palette" class="slim palette">
         <h3 class="name">Properties</h3>
     </div>
     
-    <div id="tools-pallette" class="slim pallette">
+    <div id="tools-palette" class="slim palette">
         <h3>Tools</h3>
         <div id="shape-selector">
             <ul id="shapes">
@@ -60,9 +60,9 @@
                 <li id="shape-rectangle" class="selected">Rectangle</li>
             </ul>
         </div>    
-    </div>
+    </div> <!-- tools-palette -->
     
-    <div id="style-pallette" class="slim pallette">
+    <div id="style-palette" class="slim palette">
         <h3>Style</h3>
         <h4>Stroke</h4>
         <ul id="stroke-color" class="color-picker">
@@ -78,9 +78,13 @@
             <li class="purple">&nbsp;</li>
             <li class="lime selected">&nbsp;</li>
         </ul>
-    </div>
+        <p>
+            <label for="stroke-weight" class="property-label">Stroke Weight</label>
+            <input id="stroke-weight" class="property-value" name="stroke-weight" type="text"" value="3"></input>
+        </p>
+    </div> <!-- style-palette -->
 
-    <div id="timeline-pallette" class="pallette">
+    <div id="timeline-palette" class="fat palette">
         <h3>Timeline</h3>
         <form>
             <p>
@@ -93,7 +97,7 @@
                 <input type="button" id="stage-refresh" value="Refresh" class="update" />
             </p>
         </form>
-    </div>
+    </div> <!-- timeline-palette -->
 </body>
 
 </html>

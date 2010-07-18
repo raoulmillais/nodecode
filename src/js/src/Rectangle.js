@@ -17,6 +17,7 @@
             var halfHeight = this.height / 2;
             
             stage.context.strokeStyle = this.style.stroke.toRGBAString(25, 240, 252, 0.5);
+            stage.context.lineWidth = this.style.strokeWeight;
             stage.context.fillStyle = this.style.fill.toRGBAString(25, 240, 252, 0.5);
             stage.context.beginPath();
 

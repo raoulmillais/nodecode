@@ -39,7 +39,7 @@
                 var $self = $(this);
                 $('#actors li').removeClass('selected');
                 $self.toggleClass('selected');
-                $('#properties-pallette').propertiesEditor({ 
+                $('#properties-palette').propertiesEditor({ 
                     title: model.name + ' Properties', 
                     model: model.obj, 
                     propertyChange: redrawStage
@@ -51,6 +51,7 @@
             var strokeColor = $strokeColorPicker.data('SelectedColor'),
                 fillColor = $fillColorPicker.data('SelectedColor'),
                 selectedShape = $shapeSelector.data('SelectedShape'),
+                strokeWeight = parseInt($('#stroke-weight').val()),
                 newShape,
                 newShapeAnimation = Object.create(Animation),
                 newX = evt.pageX - $canvas.offset().left,
@@ -60,17 +61,17 @@
             switch (selectedShape) {
                 case 'Circle':
                     newShape = Object.create(Circle);
-                    newShape.init(newX, newY, 50, { stroke: strokeColor, fill: fillColor });
+                    newShape.init(newX, newY, 50, { stroke: strokeColor, fill: fillColor, strokeWeight: strokeWeight });
                     break;
                 case 'Rectangle':
                     newShape = Object.create(Rectangle);
-                    newShape.init(newX, newY, 75, 50, { stroke: strokeColor, fill: fillColor });
+                    newShape.init(newX, newY, 75, 50, { stroke: strokeColor, fill: fillColor, strokeWeight: strokeWeight });
                     break;
             }
             
             newShapeAnimation.init(stage, 2000, newX, newX + 300, newShape, 'x', false, Easing.easeOutSine); 
 
-            // add the new ball to the actors pallette
+            // add the new ball to the actors palette
             $actors.items('add', { name: selectedShape, obj: newShape }).chain();
             
             // put the ball on the stage
@@ -80,8 +81,7 @@
             if (stage.isRunning) newShapeAnimation.start();
         });
        
-        $strokeColorPicker.colorPicker();
-        $fillColorPicker.colorPicker();
+        $('.color-picker').colorPicker();
         $shapeSelector.shapeSelector();
         $('#stage-start').click(function() { stage.start(); });
         $('#stage-stop').click(function() { stage.stop(); });

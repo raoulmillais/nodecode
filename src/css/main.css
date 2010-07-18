@@ -30,30 +30,35 @@ canvas { border: 10px solid #252525; width: 400px; float: left; }
 header.site h1 { font-family:"Lobster", arial, serif; font-size:40px; color: #c9ff20; margin: 10px 10px 0 10px; }
 header.site h2 { color: #656665; font-size: 16px; margin: 0 10px 10px 10px;}
 
-/* COMPONENT: =pallette
-------------------------------------------------------- */
-.pallette { border: 10px solid #252525; padding: 2px; margin: 0 10px; }
-.pallette h3 { background: #252525; margin: 0 0 5px 0; padding: 5px; font-size: 11px; font-weight: bold; }
-
-/* COMPONENT: =actors-pallette
+/* STRUCTURE: =common
 ------------------------------------------------------- */
 .slim { float: left; width: 150px; height: 200px; overflow: auto; }
+.fat { clear: both; width: 396px; height: 200px; overflow: auto; margin: 10px 0; }
 
-/* COMPONENT: =properties-pallette
+/* COMPONENT: =palette
 ------------------------------------------------------- */
-label.property-label { display: inline; width: 84px; }
+.palette { border: 10px solid #252525; padding: 2px; margin: 0 10px; }
+.palette h3 { background: #252525; margin: 0 0 5px 0; padding: 5px; font-size: 11px; font-weight: bold; }
+.palette h4 { font-size: 11px; }
 
-/* COMPONENT: =timeline-pallette
+/* COMPONENT: =actors-palette
 ------------------------------------------------------- */
-#timeline-pallette { clear: both; width: 396px; height: 200px; overflow: auto; margin: 10px 0; }
-#timeline-pallette p { clear: both; margin: 5px 0; overflow: auto; }
+
+/* COMPONENT: =properties-palette
+------------------------------------------------------- */
+label.property-label { display: inline; width: 84px; font-size: 11px; }
+input.property-value { height: 14px; font-size: 11px; }
+
+/* COMPONENT: =timeline-palette
+------------------------------------------------------- */
+#timeline-palette p { clear: both; margin: 5px 0; overflow: auto; }
 label, .color-picker-label { display: block; width: 150px; float: left; padding-top: 2px;  }
 input { width: 50px; display: block; float: left; text-align: bottom; margin: 0 5px;  border: 2px solid #252525; text-align: center; font-family:Helvetica,Verdana,Arial,sans-serif; font-size:14px; background: #656665}
 input.update { width: 75px; }
 #stage-time { width: 120px; }
 
-#shapes li, #actors li { cursor: pointer; }
-#shapes li.selected, #actors li.selected { background-color: #252525; color: #19191a; }
+.palette li, .palette li { cursor: pointer; }
+.palette li.selected, .palette li.selected { background-color: #252525; color: #19191a; }
 
 .color-picker { list-style-type: none; float: left; width: 150px; display: block; margin: 5px 0; }
 .color-picker li { display: block; float: left; width: 20px; height: 20px; border: 2px solid #252525; margin: 0 5px; cursor: pointer; }
