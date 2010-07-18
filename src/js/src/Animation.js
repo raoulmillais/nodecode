@@ -26,6 +26,7 @@
             if (this.isRunning) return this;
             
             this.isRunning = true;
+            if (this.currentFrame === 0) this.originalValue = this.targetObject[this.targetProperty];
             this.targetObject[this.targetProperty] = this.startValue;
             
             return this;

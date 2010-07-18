@@ -41,21 +41,20 @@
         </div>
     </canvas>
     
-    <div id="actors-pallette">
+    <div id="actors-pallette" class="slim pallette">
         <h3>Actors</h3>
         <ul id="actors">
             <li class="item"><span class="name"></span></li>
         </ul>
     </div>
     
-    <div id="properties-pallette">
-        <h3>Properties</h3>
-        <div id="properties"></div>
+    <div id="properties-pallette" class="slim pallette">
+        <h3 class="name">Properties</h3>
     </div>
     
-    <div id="tools-pallette">
+    <div id="tools-pallette" class="slim pallette">
+        <h3>Tools</h3>
             <div id="control-stroke-colour-section">
-                <span id="control-stroke-colour-label">Stroke Colour:</span>
                 <ul id="control-stroke-colour">
                     <li id="control-stroke-colour-cyan">&nbsp;</li>
                     <li id="control-stroke-colour-orange">&nbsp;</li>
@@ -64,7 +63,6 @@
                 </ul>
             </div>
             <div id="shape-selector">
-                <span id="shape-selector-label">Shape:</span>
                 <ul id="shapes">
                     <li id="shape-circle">Circle</li>
                     <li id="shape-rectangle" class="selected">Rectangle</li>
@@ -72,9 +70,9 @@
             </div>    
     </div>
 
-    <div id="timeline-pallette">
+    <div id="timeline-pallette" class="pallette">
+        <h3>Timeline</h3>
         <form>
-            <h3>Timeline</h3>
             <p>
                 <input type="button" id="stage-start" value="Start" class="update" />
                 <input type="button" id="stage-stop" value="Stop" class="update" />

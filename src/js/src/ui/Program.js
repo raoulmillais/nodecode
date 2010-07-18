@@ -15,7 +15,8 @@
             $actors = $('#actors'),
             $strokeColorPicker = $('#control-stroke-colour'),
             $shapeSelector = $('#shapes'),
-            stage = Object.create(Stage);
+            stage = Object.create(Stage),
+            redrawStage;
             
         stage.init('tile-canvas', 20, 400, function() {
             var newMinutes = Math.floor(this.time / 60000),
@@ -26,6 +27,9 @@
         });
         
         window.stage = stage;
+        redrawStage = function() {
+            stage.draw();
+        }
         
         $('#actors').items([]).chain(function() {
             var model = this.item();
@@ -34,7 +38,11 @@
                 var $self = $(this);
                 $('#actors li').removeClass('selected');
                 $self.toggleClass('selected');
-                $('#properties').propertiesEditor(model.obj);
+                $('#properties-pallette').propertiesEditor({ 
+                    title: model.name + ' Properties', 
+                    model: model.obj, 
+                    propertyChange: redrawStage
+                });
             });
         });
         
@@ -82,6 +90,6 @@
             stage.rewind(); 
             $('#stage-time').val('0m 0s 0ms');
         });
-        $('#stage-refresh').click(function() { stage.draw(); });
+        $('#stage-refresh').click(redrawStage);
     });
 })();
