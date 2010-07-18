@@ -93,6 +93,11 @@
             showArrows: false
         });
         
+        $('.dock .content').jScrollPane({
+            scrollbarWidth: 5,
+            scrollbarMargin: 5,
+            showArrows: false
+        });
         $('.color-picker').colorPicker();
         $shapeSelector.shapeSelector();
         $('#stage-start').click(function() { stage.start(); });
