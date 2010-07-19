@@ -8,7 +8,7 @@
 //= require "../ColorPicker"
 //= require "../ShapeSelector"
 
-(function() {
+(function($) {
     
     $(document).ready(function() {
         var $canvas = $('#tile-canvas'),
@@ -72,7 +72,7 @@
             newShapeAnimation.init(stage, 2000, newX, newX + 300, newShape, 'x', false, Easing.easeOutSine); 
 
             // add the new ball to the actors palette
-            $actors.items('add', { name: selectedShape, obj: newShape }).chain();
+            $actors.items('add', { name: selectedShape, obj: newShape });
             // re-initalise scrollbars
             $('.palette .content').jScrollPane({
                 scrollbarWidth: 5,
@@ -93,11 +93,8 @@
             showArrows: false
         });
         
-        $('.dock .content').jScrollPane({
-            scrollbarWidth: 5,
-            scrollbarMargin: 5,
-            showArrows: false
-        });
+        $('.dock').dock();
+        
         $('.color-picker').colorPicker();
         $shapeSelector.shapeSelector();
         $('#stage-start').click(function() { stage.start(); });
@@ -108,4 +105,4 @@
         });
         $('#stage-refresh').click(redrawStage);
     });
-})();
+})(jQuery);

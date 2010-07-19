@@ -41,7 +41,7 @@ header.site h2 { color: #656665; font-size: 16px; margin: 0 10px 10px 10px;}
 
 #bottom-dock { border-top: 10px solid #252525; position: fixed; height: 150px; width: 100%; bottom: 0; left: 0; }
 #bottom-dock > .content { height: 150px; }
-#right-dock { border-left: 10px solid #252525; position: fixed; height: 100%; width: 200px; top: 0; right: 0; }
+#right-dock { border-left: 10px solid #252525; position: fixed; height: 100%; width: 200px; top: 0; right: 0; z-index: 2; }
 #right-dock > .content { height: 100%; width: 200px; }
 
 /* COMPONENT: =palette
