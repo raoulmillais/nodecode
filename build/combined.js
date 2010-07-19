@@ -162,7 +162,14 @@ e&&e.document?e.document.compatMode==="CSS1Compat"&&e.document.documentElement["
     }
 })();
 (function() {
-    window.Color = {
+
+    window.theater = { };
+
+})();
+
+(function() {
+
+    theater.Color = {
         init: function(red, green, blue, alpha) {
             this.red = red;
             this.green = green;
@@ -179,6 +186,7 @@ e&&e.document?e.document.compatMode==="CSS1Compat"&&e.document.documentElement["
         }
 
     }
+
 })();
 
 (function($) {
@@ -199,7 +207,7 @@ e&&e.document?e.document.compatMode==="CSS1Compat"&&e.document.documentElement["
             });
 
             function selectColor(el) {
-                var result = Object.create(Color),
+                var result = Object.create(theater.Color),
                     $el = $(el);
 
                 if ($el.hasClass('cyan')) {
@@ -2627,9 +2635,10 @@ $.Chain.extend('items', {
 });
 
 })(jQuery);
+
 (function() {
 
-    window.Stage = {
+    theater.Stage = {
 
         animations: [],
 
@@ -2719,8 +2728,10 @@ $.Chain.extend('items', {
     };
 
 })();
+
 (function() {
-    window.Easing = {
+
+    theater.Easing = {
 
         linear: function(time, startValue, endValue, duration) {
             return endValue * time / duration + startValue;
@@ -2836,11 +2847,12 @@ $.Chain.extend('items', {
         }
 
     }
+
 })();
 
 (function() {
 
-    window.Animation = {
+    theater.Animation = {
 
         init: function(stage, duration, startValue,
                        endValue, targetObject, targetProperty,
@@ -2908,7 +2920,7 @@ $.Chain.extend('items', {
 
 (function() {
 
-    window.Circle = {
+    theater.Circle = {
 
         init: function(x, y, size, style) {
             this.x = x;
@@ -2937,7 +2949,7 @@ $.Chain.extend('items', {
 
 (function() {
 
-    window.Rectangle = {
+    theater.Rectangle = {
 
         init: function(x, y, width, height, style) {
             this.x = x;
@@ -2980,7 +2992,7 @@ $.Chain.extend('items', {
             $strokeColorPicker = $('#stroke-color'),
             $fillColorPicker = $('#fill-color'),
             $shapeSelector = $('#shapes'),
-            stage = Object.create(Stage),
+            stage = Object.create(theater.Stage),
             redrawStage;
 
         stage.init('tile-canvas', 20, 400, function() {
@@ -3017,22 +3029,22 @@ $.Chain.extend('items', {
                 selectedShape = $shapeSelector.data('SelectedShape'),
                 strokeWeight = parseInt($('#stroke-weight').val()),
                 newShape,
-                newShapeAnimation = Object.create(Animation),
+                newShapeAnimation = Object.create(theater.Animation),
                 newX = evt.pageX - $canvas.offset().left,
                 newY = evt.pageY - $canvas.offset().top;
 
             switch (selectedShape) {
                 case 'Circle':
-                    newShape = Object.create(Circle);
+                    newShape = Object.create(theater.Circle);
                     newShape.init(newX, newY, 50, { stroke: strokeColor, fill: fillColor, strokeWeight: strokeWeight });
                     break;
                 case 'Rectangle':
-                    newShape = Object.create(Rectangle);
+                    newShape = Object.create(theater.Rectangle);
                     newShape.init(newX, newY, 75, 50, { stroke: strokeColor, fill: fillColor, strokeWeight: strokeWeight });
                     break;
             }
 
-            newShapeAnimation.init(stage, 2000, newX, newX + 300, newShape, 'x', false, Easing.easeOutSine);
+            newShapeAnimation.init(stage, 2000, newX, newX + 300, newShape, 'x', false, theater.Easing.easeOutSine);
 
             $actors.items('add', { name: selectedShape, obj: newShape, animations: [ newShapeAnimation ] });
             $('.palette .content').jScrollPane({

@@ -1,8 +1,9 @@
+//= require "init"
 //= require "Color"
 
 (function() {
     
-    window.Circle = {
+    theater.Circle = {
 
         init: function(x, y, size, style) {
             this.x = x;

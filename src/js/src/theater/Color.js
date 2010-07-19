@@ -1,5 +1,8 @@
+//= require "init"
+
 (function() {
-    window.Color = {
+    
+    theater.Color = {
         init: function(red, green, blue, alpha) {
             this.red = red;
             this.green = green;
@@ -16,4 +19,5 @@
         }
         
     }
+    
 })();

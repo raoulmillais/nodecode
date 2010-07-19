@@ -1,8 +1,9 @@
+//= require "init"
 //= require "Easing"
 
 (function() {
     
-    window.Animation = {
+    theater.Animation = {
         
         init: function(stage, duration, startValue, 
                        endValue, targetObject, targetProperty, 

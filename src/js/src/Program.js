@@ -20,7 +20,7 @@
             $strokeColorPicker = $('#stroke-color'),
             $fillColorPicker = $('#fill-color'),
             $shapeSelector = $('#shapes'),
-            stage = Object.create(Stage),
+            stage = Object.create(theater.Stage),
             redrawStage;
             
         stage.init('tile-canvas', 20, 400, function() {
@@ -58,23 +58,23 @@
                 selectedShape = $shapeSelector.data('SelectedShape'),
                 strokeWeight = parseInt($('#stroke-weight').val()),
                 newShape,
-                newShapeAnimation = Object.create(Animation),
+                newShapeAnimation = Object.create(theater.Animation),
                 newX = evt.pageX - $canvas.offset().left,
                 newY = evt.pageY - $canvas.offset().top;
             
             // create a new ball and attach an animation
             switch (selectedShape) {
                 case 'Circle':
-                    newShape = Object.create(Circle);
+                    newShape = Object.create(theater.Circle);
                     newShape.init(newX, newY, 50, { stroke: strokeColor, fill: fillColor, strokeWeight: strokeWeight });
                     break;
                 case 'Rectangle':
-                    newShape = Object.create(Rectangle);
+                    newShape = Object.create(theater.Rectangle);
                     newShape.init(newX, newY, 75, 50, { stroke: strokeColor, fill: fillColor, strokeWeight: strokeWeight });
                     break;
             }
             
-            newShapeAnimation.init(stage, 2000, newX, newX + 300, newShape, 'x', false, Easing.easeOutSine); 
+            newShapeAnimation.init(stage, 2000, newX, newX + 300, newShape, 'x', false, theater.Easing.easeOutSine); 
 
             // add the new ball to the actors palette
             $actors.items('add', { name: selectedShape, obj: newShape, animations: [ newShapeAnimation ] });

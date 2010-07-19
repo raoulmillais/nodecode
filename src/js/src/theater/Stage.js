@@ -1,6 +1,8 @@
+//= require "init"
+
 (function() {
 
-    window.Stage = {
+    theater.Stage = {
         
         animations: [],
         

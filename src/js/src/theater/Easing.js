@@ -1,5 +1,8 @@
+//= require "init"
+
 (function() {
-    window.Easing = {
+
+    theater.Easing = {
         
         linear: function(time, startValue, endValue, duration) {
             return endValue * time / duration + startValue;
@@ -115,4 +118,5 @@
         }
         
     }
+    
 })();

@@ -1,8 +1,9 @@
+//= require "init"
 //= require "Color"
 
 (function() {
     
-    window.Rectangle = {
+    theater.Rectangle = {
 
         init: function(x, y, width, height, style) {
             this.x = x;

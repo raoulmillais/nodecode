@@ -20,7 +20,7 @@
             });        
             
             function selectColor(el) {
-                var result = Object.create(Color),
+                var result = Object.create(theater.Color),
                     $el = $(el);
                     
                 if ($el.hasClass('cyan')) {
