@@ -1,6 +1,6 @@
 //= require <jquery-1.4.2>
 //= require "../Object"
-//= require "../Color"
+//= require "../theater/Color"
 
 (function($) {
 

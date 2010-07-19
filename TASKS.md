@@ -2,7 +2,7 @@ Immediate
 ---------
 
 # Create class to represent drawing surface, encapsulating stage
-# Create controller to coordinate communication between widgets
+# Create environment controller to coordinate communication between widgets (see below)
 # Fix Rectangle rendering bug (top left corner not joining)
 
 Mid-term
@@ -27,6 +27,7 @@ Featurelist
 # Remove actors
 # Integrate with Node.js
 # i18n
+# Browser feature detection with intelligent disabling of features
 
 Environment
 ===========

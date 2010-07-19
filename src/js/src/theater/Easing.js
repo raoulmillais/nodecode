@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
     window.Easing = {
         
         linear: function(time, startValue, endValue, duration) {

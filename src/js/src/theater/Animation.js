@@ -1,4 +1,4 @@
-﻿//= require "Easing"
+//= require "Easing"
 
 (function() {
     

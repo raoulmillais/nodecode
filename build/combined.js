@@ -1,388 +1,3 @@
-﻿//= require "Easing"
-
-(function() {
-
-    window.Animation = {
-
-        init: function(stage, duration, startValue,
-                       endValue, targetObject, targetProperty,
-                       revertOnStop /*optional*/, easingFunction /*optional */) {
-            if (!(targetProperty in targetObject)) throw new Error("targetProperty is not a property of targetObject");
-            this.originalValue = targetObject[targetProperty];
-            this.stage = stage;
-            this.duration = duration;
-            this.startValue = startValue;
-            this.endValue = endValue;
-            this.targetObject = targetObject;
-            this.targetProperty = targetProperty;
-            this.totalFrames = stage.fps * duration / 1000;
-            this.currentFrame = 0;
-            this.isRunning = false;
-            this.revertOnStop = revertOnStop || false;
-            this.easingFunction = easingFunction || Easing.linear;
-        },
-
-        start: function() {
-            if (this.isRunning) return this;
-
-            this.isRunning = true;
-            if (this.currentFrame === 0) this.originalValue = this.targetObject[this.targetProperty];
-            this.targetObject[this.targetProperty] = this.startValue;
-
-            return this;
-        },
-
-        stop: function() {
-            if (!this.isRunning) return this;
-
-            this.isRunning = false;
-
-            return this;
-        },
-
-        reset: function(rewind) {
-            if (this.isRunning) this.stop();
-
-            this.targetObject[this.targetProperty] = (rewind) ? this.startValue : this.originalValue;
-            this.currentFrame = 0;
-
-            return this;
-        },
-
-        advanceFrame: function() {
-            if (!this.isRunning) return this;
-
-            if (this.currentFrame == this.totalFrames) {
-                this.isRunning = false;
-                if (this.revertOnStop) {
-                    this.targetObject[this.targetProperty] = this.originalValue;
-                }
-            } else {
-                this.targetObject[this.targetProperty] = this.easingFunction(this.currentFrame, this.startValue, this.endValue, this.totalFrames);
-                this.currentFrame++;
-            }
-
-            return this;
-        }
-    }
-
-})();
-﻿(function() {
-    window.Color = {
-        init: function(red, green, blue, alpha) {
-            this.red = red;
-            this.green = green;
-            this.blue = blue;
-            this.alpha = alpha || 1;
-        },
-
-        toRGBAString: function() {
-            return 'rgba(' + this.red + ',' + this.green + ',' + this.blue + ',' + this.alpha + ')';
-        },
-
-        toRGBString: function() {
-            return 'rgb(' + this.red + ',' + this.green + ',' + this.blue + ')';
-        }
-
-    }
-})();
-
-(function() {
-
-    window.Circle = {
-
-        init: function(x, y, size, style) {
-            this.x = x;
-            this.y = y;
-            this.size = size;
-            this.style = style;
-        },
-
-        draw: function(stage) {
-            var radius = this.size / 2;
-
-            stage.context.strokeStyle = this.style.stroke.toRGBAString(25, 240, 252, 0.5);
-            stage.context.lineWidth = this.style.strokeWeight;
-            stage.context.fillStyle = this.style.fill.toRGBAString(25, 240, 252, 0.5);
-            stage.context.beginPath();
-            stage.context.arc(this.x, this.y, radius, 0, Math.PI * 2, true);
-
-            if (this.style.fill.alpha != 0)
-                stage.context.fill();
-            if (this.style.stroke.alpha != 0)
-                stage.context.stroke();
-            }
-    };
-
-})();
-﻿(function() {
-    window.Easing = {
-
-        linear: function(time, startValue, endValue, duration) {
-            return endValue * time / duration + startValue;
-        },
-
-        easeInQuad: function (time, startValue, endValue, duration) {
-            time /= duration;
-            return endValue * time * time + startValue;
-        },
-
-        easeOutQuad: function (time, startValue, endValue, duration) {
-            time /= duration;
-            return -endValue * time*(time-2) + startValue;
-        },
-
-        easeInOutQuad: function (time, startValue, endValue, duration) {
-            time /= duration/2;
-            if (time < 1) return endValue/2*time*time + startValue;
-            time--;
-            return -endValue/2 * (time*(time-2) - 1) + startValue;
-        },
-
-        easeInCubic: function (time, startValue, endValue, duration) {
-            time /= duration;
-            return endValue*time*time*time + startValue;
-        },
-
-        easeOutCubic: function (time, startValue, endValue, duration) {
-            time /= duration;
-            time--;
-            return endValue*(time*time*time + 1) + startValue;
-        },
-
-        easeInOutCubic: function (time, startValue, endValue, duration) {
-            time /= duration/2;
-            if (time < 1) return endValue/2*time*time*time + startValue;
-            time -= 2;
-            return endValue/2*(time*time*time + 2) + startValue;
-        },
-
-        easeInQuart: function (time, startValue, endValue, duration) {
-            time /= duration;
-            return endValue*time*time*time*time + startValue;
-        },
-
-        easeOutQuart: function (time, startValue, endValue, duration) {
-            time /= duration;
-            time--;
-            return -endValue * (time*time*time*time - 1) + startValue;
-        },
-
-        easeInOutQuart: function (time, startValue, endValue, duration) {
-            time /= duration/2;
-            if (time < 1) return endValue/2*time*time*time*time + startValue;
-            time -= 2;
-            return -endValue/2 * (time*time*time*time - 2) + startValue;
-        },
-
-        easeInQuint: function (time, startValue, endValue, duration) {
-            time /= duration;
-            return endValue*time*time*time*time*time + startValue;
-        },
-
-        easeOutQuint: function (time, startValue, endValue, duration) {
-            time /= duration;
-            time--;
-            return endValue*(time*time*time*time*time + 1) + startValue;
-        },
-
-        easeInSine: function (time, startValue, endValue, duration) {
-            return -endValue * Math.cos(time/duration * (Math.PI/2)) + endValue + startValue;
-        },
-
-        easeOutSine: function (time, startValue, endValue, duration) {
-            return endValue * Math.sin(time/duration * (Math.PI/2)) + startValue;
-        },
-
-        easeInOutSine: function (time, startValue, endValue, duration) {
-            return -endValue/2 * (Math.cos(Math.PI*time/duration) - 1) + startValue;
-        },
-
-        easeInExpo: function (time, startValue, endValue, duration) {
-            return endValue * Math.pow( 2, 10 * (time/duration - 1) ) + startValue;
-        },
-
-        easeOutExpo: function (time, startValue, endValue, duration) {
-            return endValue * ( -Math.pow( 2, -10 * time/duration ) + 1 ) + startValue;
-        },
-
-        easeInOutExpo: function (time, startValue, endValue, duration) {
-            time /= duration/2;
-            if (time < 1) return endValue/2 * Math.pow( 2, 10 * (time - 1) ) + startValue;
-            time--;
-            return endValue/2 * ( -Math.pow( 2, -10 * time) + 2 ) + startValue;
-        },
-
-        easeInCirc: function (time, startValue, endValue, duration) {
-            time /= duration;
-            return -endValue * (Math.sqrt(1 - time*time) - 1) + startValue;
-        },
-
-        easeOutCirc: function (time, startValue, endValue, duration) {
-            time /= duration;
-            time--;
-            return endValue * Math.sqrt(1 - time*time) + startValue;
-        },
-
-        easeInOutCirc: function (time, startValue, endValue, duration) {
-            time /= duration/2;
-            if (time < 1) return -endValue/2 * (Math.sqrt(1 - time*time) - 1) + startValue;
-            time -= 2;
-            return endValue/2 * (Math.sqrt(1 - time*time) + 1) + startValue;
-        }
-
-    }
-})();
-(function() {
-    if (typeof Object.create !== 'function') {
-        Object.create = function (o) {
-            function F() {}
-            F.prototype = o;
-            return new F();
-        };
-    }
-})();
-
-(function() {
-
-    window.Rectangle = {
-
-        init: function(x, y, width, height, style) {
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
-            this.style = style;
-        },
-
-        draw: function(stage) {
-            var halfWidth = this.width / 2;
-            var halfHeight = this.height / 2;
-
-            stage.context.strokeStyle = this.style.stroke.toRGBAString(25, 240, 252, 0.5);
-            stage.context.lineWidth = this.style.strokeWeight;
-            stage.context.fillStyle = this.style.fill.toRGBAString(25, 240, 252, 0.5);
-            stage.context.beginPath();
-
-            stage.context.moveTo(this.x - halfWidth, this.y - halfHeight);
-            stage.context.lineTo(this.x + halfWidth, this.y - halfHeight);
-            stage.context.lineTo(this.x + halfWidth, this.y + halfHeight);
-            stage.context.lineTo(this.x - halfWidth, this.y + halfHeight);
-            stage.context.lineTo(this.x - halfWidth, this.y - halfHeight);
-
-            if (this.style.fill.alpha != 0)
-                stage.context.fill();
-            if (this.style.stroke.alpha != 0)
-                stage.context.stroke();
-        }
-    };
-
-})();
-﻿(function() {
-
-    window.Stage = {
-
-        animations: [],
-
-        actors: [],
-
-        init: function(canvasId, fps, size,
-                    onDraw /*optional*/) {
-            var self = this,
-                canvas = document.getElementById(canvasId);
-
-            if (!canvas.getContext) return;
-
-            this.fps = fps;
-            this.context = canvas.getContext('2d');
-            this.boundCallback = function() {
-                self.draw.call(self);
-                if (onDraw)
-                    onDraw.call(self);
-            };
-            this.size = size;
-            this.isRunning = false;
-            this.time = 0;
-        },
-
-        start: function() {
-            if (this.isRunning) return this;
-            this.isRunning = true;
-
-            if (this.context && this.boundCallback && !this.intervalId) {
-                this.intervalId = window.setInterval(this.boundCallback, 1000 / this.fps);
-            }
-
-            for (var j = 0, m = this.animations.length; j < m; j++) {
-                this.animations[j].start();
-            }
-
-            return this;
-        },
-
-        stop: function() {
-            if (!this.isRunning) return this;
-            this.isRunning = false;
-
-            if (this.context && this.boundCallback && this.intervalId) {
-                window.clearInterval(this.intervalId);
-                this.intervalId = undefined;
-            }
-
-            for (var j = 0, m = this.animations.length; j < m; j++) {
-                this.animations[j].stop();
-            }
-
-            return this;
-        },
-
-        rewind: function() {
-            this.stop();
-            for (var j = 0, m = this.animations.length; j < m; j++) {
-                this.animations[j].reset(true);
-            }
-            this.time = 0;
-            this.draw();
-        },
-
-        clear: function() {
-            if (!this.context) return this;
-
-            this.context.clearRect(0, 0, this.size, this.size);
-
-            return this;
-        },
-
-        draw: function() {
-            this.clear();
-
-            for (var i = 0, l = this.actors.length; i < l; i++) {
-                this.actors[i].draw(this);
-            }
-            for (var j = 0, m = this.animations.length; j < m; j++) {
-                this.animations[j].advanceFrame();
-            }
-
-            this.time += 1000 / this.fps;
-            return this;
-        }
-
-    };
-
-})();
-
-(function() {
-
-    window.Style = {
-
-        init: function(strokeColor, fillColor) {
-            this.strokeColor = strokeColor;
-            this.fillColor = fillColor;
-        }
-
-    }
-
-})();
 /*!
  * jQuery JavaScript Library v1.4.2
  * http://jquery.com/
@@ -537,6 +152,34 @@ d,e);d={top:b.top-e.top+j,left:b.left-e.left+i};"using"in b?b.using.call(a,d):f.
 f.top,left:d.left-f.left}},offsetParent:function(){return this.map(function(){for(var a=this.offsetParent||s.body;a&&!/^body|html$/i.test(a.nodeName)&&c.css(a,"position")==="static";)a=a.offsetParent;return a})}});c.each(["Left","Top"],function(a,b){var d="scroll"+b;c.fn[d]=function(f){var e=this[0],j;if(!e)return null;if(f!==w)return this.each(function(){if(j=wa(this))j.scrollTo(!a?f:c(j).scrollLeft(),a?f:c(j).scrollTop());else this[d]=f});else return(j=wa(e))?"pageXOffset"in j?j[a?"pageYOffset":
 "pageXOffset"]:c.support.boxModel&&j.document.documentElement[d]||j.document.body[d]:e[d]}});c.each(["Height","Width"],function(a,b){var d=b.toLowerCase();c.fn["inner"+b]=function(){return this[0]?c.css(this[0],d,false,"padding"):null};c.fn["outer"+b]=function(f){return this[0]?c.css(this[0],d,false,f?"margin":"border"):null};c.fn[d]=function(f){var e=this[0];if(!e)return f==null?null:this;if(c.isFunction(f))return this.each(function(j){var i=c(this);i[d](f.call(this,j,i[d]()))});return"scrollTo"in
 e&&e.document?e.document.compatMode==="CSS1Compat"&&e.document.documentElement["client"+b]||e.document.body["client"+b]:e.nodeType===9?Math.max(e.documentElement["client"+b],e.body["scroll"+b],e.documentElement["scroll"+b],e.body["offset"+b],e.documentElement["offset"+b]):f===w?c.css(e,d):this.css(d,typeof f==="string"?f:f+"px")}});A.jQuery=A.$=c})(window);
+(function() {
+    if (typeof Object.create !== 'function') {
+        Object.create = function (o) {
+            function F() {}
+            F.prototype = o;
+            return new F();
+        };
+    }
+})();
+(function() {
+    window.Color = {
+        init: function(red, green, blue, alpha) {
+            this.red = red;
+            this.green = green;
+            this.blue = blue;
+            this.alpha = alpha || 1;
+        },
+
+        toRGBAString: function() {
+            return 'rgba(' + this.red + ',' + this.green + ',' + this.blue + ',' + this.alpha + ')';
+        },
+
+        toRGBString: function() {
+            return 'rgb(' + this.red + ',' + this.green + ',' + this.blue + ')';
+        }
+
+    }
+})();
 
 (function($) {
 
@@ -675,6 +318,107 @@ $.fn.extend({
         });
 
     }
+
+})(jQuery);
+
+(function($) {
+
+    $.fn.propertiesEditor = function(options) {
+        var $self = this,
+            $list = $('<ul></ul>'),
+            $title = $('<h3></h3>').addClass(options.titleClass),
+            $label,
+            $item,
+            $edit;
+
+        options = $.extend($.fn.propertiesEditor.defaults, options);
+
+        if (!options.model) return this;
+
+        this.data('PropertiesEditor', options.model);
+
+        this.empty()
+
+        $title.appendTo(this).html(options.title);
+        for(var prop in options.model) {
+            if (typeof options.model[prop] !== 'function') {
+                $edit = $('<input></input>')
+                    .addClass(options.propertyValueClass)
+                    .attr('type', 'text')
+                    .attr('name', prop)
+                    .attr('value', options.model[prop]);
+
+                if (typeof options.model[prop] === 'object')
+                    $edit.attr('readonly', 'true');
+
+                $label = $('<label></labell>').attr('for', prop).addClass(options.propertyLabelClass).text(prop);
+                $item = $('<li></li>').css('clear', 'both');
+                $label.appendTo($item);
+                $edit.appendTo($item);
+                $item.appendTo($list);
+
+                if (typeof options.model[prop] !== 'object') {
+                    $edit.blur(function() {
+                        var oldValue = options.model[this.name],
+                            newValue = $(this).val();
+
+                        if (newValue != oldValue) {
+                            console.log('Changing ' + this.name + ' to ' + newValue);
+                            if (typeof oldValue === 'number') newValue = parseInt(newValue);
+                            options.model[this.name] = newValue;
+                        }
+
+                        $.isFunction(options.propertyChange) && options.propertyChange.call($self);
+                    });
+                }
+            }
+        }
+
+        $list.appendTo(this);
+
+        return this;
+    }
+
+    $.fn.propertiesEditor.defaults = {
+        title: 'Properties',
+        titleClass: 'name',
+        propertyLabelClass: 'property-label',
+        propertyValueClass: 'property-value',
+        propertyChange: null
+    }
+
+
+})(jQuery);
+
+(function($) {
+
+    $.fn.shapeSelector = function() {
+        var $self = this,
+            selectedShape = selectShape(this.children('li.selected').attr('id'));
+
+        $self.data('SelectedShape', selectedShape);
+
+        this.children('li').click(function() {
+            $self.children('li').removeClass('selected');
+            $(this).toggleClass('selected');
+            $self.data('SelectedShape', selectShape(this.id));
+        });
+
+        function selectShape(id) {
+            var result;
+
+            switch (id) {
+                case 'shape-circle':
+                    return 'Circle';
+                case 'shape-rectangle':
+                    return 'Rectangle';
+                default:
+                    return 'Circle';
+            }
+        }
+
+        return this;
+    };
 
 })(jQuery);
 /**
@@ -2883,108 +2627,350 @@ $.Chain.extend('items', {
 });
 
 })(jQuery);
+(function() {
 
+    window.Stage = {
 
-(function($) {
+        animations: [],
 
-    $.fn.shapeSelector = function() {
-        var $self = this,
-            selectedShape = selectShape(this.children('li.selected').attr('id'));
+        actors: [],
 
-        $self.data('SelectedShape', selectedShape);
+        init: function(canvasId, fps, size,
+                    onDraw /*optional*/) {
+            var self = this,
+                canvas = document.getElementById(canvasId);
 
-        this.children('li').click(function() {
-            $self.children('li').removeClass('selected');
-            $(this).toggleClass('selected');
-            $self.data('SelectedShape', selectShape(this.id));
-        });
+            if (!canvas.getContext) return;
 
-        function selectShape(id) {
-            var result;
+            this.fps = fps;
+            this.context = canvas.getContext('2d');
+            this.boundCallback = function() {
+                self.draw.call(self);
+                if (onDraw)
+                    onDraw.call(self);
+            };
+            this.size = size;
+            this.isRunning = false;
+            this.time = 0;
+        },
 
-            switch (id) {
-                case 'shape-circle':
-                    return 'Circle';
-                case 'shape-rectangle':
-                    return 'Rectangle';
-                default:
-                    return 'Circle';
+        start: function() {
+            if (this.isRunning) return this;
+            this.isRunning = true;
+
+            if (this.context && this.boundCallback && !this.intervalId) {
+                this.intervalId = window.setInterval(this.boundCallback, 1000 / this.fps);
             }
+
+            for (var j = 0, m = this.animations.length; j < m; j++) {
+                this.animations[j].start();
+            }
+
+            return this;
+        },
+
+        stop: function() {
+            if (!this.isRunning) return this;
+            this.isRunning = false;
+
+            if (this.context && this.boundCallback && this.intervalId) {
+                window.clearInterval(this.intervalId);
+                this.intervalId = undefined;
+            }
+
+            for (var j = 0, m = this.animations.length; j < m; j++) {
+                this.animations[j].stop();
+            }
+
+            return this;
+        },
+
+        rewind: function() {
+            this.stop();
+            for (var j = 0, m = this.animations.length; j < m; j++) {
+                this.animations[j].reset(true);
+            }
+            this.time = 0;
+            this.draw();
+        },
+
+        clear: function() {
+            if (!this.context) return this;
+
+            this.context.clearRect(0, 0, this.size, this.size);
+
+            return this;
+        },
+
+        draw: function() {
+            this.clear();
+
+            for (var i = 0, l = this.actors.length; i < l; i++) {
+                this.actors[i].draw(this);
+            }
+            for (var j = 0, m = this.animations.length; j < m; j++) {
+                this.animations[j].advanceFrame();
+            }
+
+            this.time += 1000 / this.fps;
+            return this;
         }
 
-        return this;
     };
 
-})(jQuery);
+})();
+(function() {
+    window.Easing = {
 
-(function($) {
+        linear: function(time, startValue, endValue, duration) {
+            return endValue * time / duration + startValue;
+        },
 
-    $.fn.propertiesEditor = function(options) {
-        var $self = this,
-            $list = $('<ul></ul>'),
-            $title = $('<h3></h3>').addClass(options.titleClass),
-            $label,
-            $item,
-            $edit;
+        easeInQuad: function (time, startValue, endValue, duration) {
+            time /= duration;
+            return endValue * time * time + startValue;
+        },
 
-        options = $.extend($.fn.propertiesEditor.defaults, options);
+        easeOutQuad: function (time, startValue, endValue, duration) {
+            time /= duration;
+            return -endValue * time*(time-2) + startValue;
+        },
 
-        if (!options.model) return this;
+        easeInOutQuad: function (time, startValue, endValue, duration) {
+            time /= duration/2;
+            if (time < 1) return endValue/2*time*time + startValue;
+            time--;
+            return -endValue/2 * (time*(time-2) - 1) + startValue;
+        },
 
-        this.data('PropertiesEditor', options.model);
+        easeInCubic: function (time, startValue, endValue, duration) {
+            time /= duration;
+            return endValue*time*time*time + startValue;
+        },
 
-        this.empty()
+        easeOutCubic: function (time, startValue, endValue, duration) {
+            time /= duration;
+            time--;
+            return endValue*(time*time*time + 1) + startValue;
+        },
 
-        $title.appendTo(this).html(options.title);
-        for(var prop in options.model) {
-            if (typeof options.model[prop] !== 'function') {
-                $edit = $('<input></input>')
-                    .addClass(options.propertyValueClass)
-                    .attr('type', 'text')
-                    .attr('name', prop)
-                    .attr('value', options.model[prop]);
+        easeInOutCubic: function (time, startValue, endValue, duration) {
+            time /= duration/2;
+            if (time < 1) return endValue/2*time*time*time + startValue;
+            time -= 2;
+            return endValue/2*(time*time*time + 2) + startValue;
+        },
 
-                if (typeof options.model[prop] === 'object')
-                    $edit.attr('readonly', 'true');
+        easeInQuart: function (time, startValue, endValue, duration) {
+            time /= duration;
+            return endValue*time*time*time*time + startValue;
+        },
 
-                $label = $('<label></labell>').attr('for', prop).addClass(options.propertyLabelClass).text(prop);
-                $item = $('<li></li>').css('clear', 'both');
-                $label.appendTo($item);
-                $edit.appendTo($item);
-                $item.appendTo($list);
+        easeOutQuart: function (time, startValue, endValue, duration) {
+            time /= duration;
+            time--;
+            return -endValue * (time*time*time*time - 1) + startValue;
+        },
 
-                if (typeof options.model[prop] !== 'object') {
-                    $edit.blur(function() {
-                        var oldValue = options.model[this.name],
-                            newValue = $(this).val();
+        easeInOutQuart: function (time, startValue, endValue, duration) {
+            time /= duration/2;
+            if (time < 1) return endValue/2*time*time*time*time + startValue;
+            time -= 2;
+            return -endValue/2 * (time*time*time*time - 2) + startValue;
+        },
 
-                        if (newValue != oldValue) {
-                            console.log('Changing ' + this.name + ' to ' + newValue);
-                            if (typeof oldValue === 'number') newValue = parseInt(newValue);
-                            options.model[this.name] = newValue;
-                        }
+        easeInQuint: function (time, startValue, endValue, duration) {
+            time /= duration;
+            return endValue*time*time*time*time*time + startValue;
+        },
 
-                        $.isFunction(options.propertyChange) && options.propertyChange.call($self);
-                    });
-                }
-            }
+        easeOutQuint: function (time, startValue, endValue, duration) {
+            time /= duration;
+            time--;
+            return endValue*(time*time*time*time*time + 1) + startValue;
+        },
+
+        easeInSine: function (time, startValue, endValue, duration) {
+            return -endValue * Math.cos(time/duration * (Math.PI/2)) + endValue + startValue;
+        },
+
+        easeOutSine: function (time, startValue, endValue, duration) {
+            return endValue * Math.sin(time/duration * (Math.PI/2)) + startValue;
+        },
+
+        easeInOutSine: function (time, startValue, endValue, duration) {
+            return -endValue/2 * (Math.cos(Math.PI*time/duration) - 1) + startValue;
+        },
+
+        easeInExpo: function (time, startValue, endValue, duration) {
+            return endValue * Math.pow( 2, 10 * (time/duration - 1) ) + startValue;
+        },
+
+        easeOutExpo: function (time, startValue, endValue, duration) {
+            return endValue * ( -Math.pow( 2, -10 * time/duration ) + 1 ) + startValue;
+        },
+
+        easeInOutExpo: function (time, startValue, endValue, duration) {
+            time /= duration/2;
+            if (time < 1) return endValue/2 * Math.pow( 2, 10 * (time - 1) ) + startValue;
+            time--;
+            return endValue/2 * ( -Math.pow( 2, -10 * time) + 2 ) + startValue;
+        },
+
+        easeInCirc: function (time, startValue, endValue, duration) {
+            time /= duration;
+            return -endValue * (Math.sqrt(1 - time*time) - 1) + startValue;
+        },
+
+        easeOutCirc: function (time, startValue, endValue, duration) {
+            time /= duration;
+            time--;
+            return endValue * Math.sqrt(1 - time*time) + startValue;
+        },
+
+        easeInOutCirc: function (time, startValue, endValue, duration) {
+            time /= duration/2;
+            if (time < 1) return -endValue/2 * (Math.sqrt(1 - time*time) - 1) + startValue;
+            time -= 2;
+            return endValue/2 * (Math.sqrt(1 - time*time) + 1) + startValue;
         }
 
-        $list.appendTo(this);
+    }
+})();
 
-        return this;
+(function() {
+
+    window.Animation = {
+
+        init: function(stage, duration, startValue,
+                       endValue, targetObject, targetProperty,
+                       revertOnStop /*optional*/, easingFunction /*optional */) {
+            if (!(targetProperty in targetObject)) throw new Error("targetProperty is not a property of targetObject");
+            this.originalValue = targetObject[targetProperty];
+            this.stage = stage;
+            this.duration = duration;
+            this.startValue = startValue;
+            this.endValue = endValue;
+            this.targetObject = targetObject;
+            this.targetProperty = targetProperty;
+            this.totalFrames = stage.fps * duration / 1000;
+            this.currentFrame = 0;
+            this.isRunning = false;
+            this.revertOnStop = revertOnStop || false;
+            this.easingFunction = easingFunction || Easing.linear;
+        },
+
+        start: function() {
+            if (this.isRunning) return this;
+
+            this.isRunning = true;
+            if (this.currentFrame === 0) this.originalValue = this.targetObject[this.targetProperty];
+            this.targetObject[this.targetProperty] = this.startValue;
+
+            return this;
+        },
+
+        stop: function() {
+            if (!this.isRunning) return this;
+
+            this.isRunning = false;
+
+            return this;
+        },
+
+        reset: function(rewind) {
+            if (this.isRunning) this.stop();
+
+            this.targetObject[this.targetProperty] = (rewind) ? this.startValue : this.originalValue;
+            this.currentFrame = 0;
+
+            return this;
+        },
+
+        advanceFrame: function() {
+            if (!this.isRunning) return this;
+
+            if (this.currentFrame == this.totalFrames) {
+                this.isRunning = false;
+                if (this.revertOnStop) {
+                    this.targetObject[this.targetProperty] = this.originalValue;
+                }
+            } else {
+                this.targetObject[this.targetProperty] = this.easingFunction(this.currentFrame, this.startValue, this.endValue, this.totalFrames);
+                this.currentFrame++;
+            }
+
+            return this;
+        }
     }
 
-    $.fn.propertiesEditor.defaults = {
-        title: 'Properties',
-        titleClass: 'name',
-        propertyLabelClass: 'property-label',
-        propertyValueClass: 'property-value',
-        propertyChange: null
-    }
+})();
 
+(function() {
 
-})(jQuery);
+    window.Circle = {
+
+        init: function(x, y, size, style) {
+            this.x = x;
+            this.y = y;
+            this.size = size;
+            this.style = style;
+        },
+
+        draw: function(stage) {
+            var radius = this.size / 2;
+
+            stage.context.strokeStyle = this.style.stroke.toRGBAString(25, 240, 252, 0.5);
+            stage.context.lineWidth = this.style.strokeWeight;
+            stage.context.fillStyle = this.style.fill.toRGBAString(25, 240, 252, 0.5);
+            stage.context.beginPath();
+            stage.context.arc(this.x, this.y, radius, 0, Math.PI * 2, true);
+
+            if (this.style.fill.alpha != 0)
+                stage.context.fill();
+            if (this.style.stroke.alpha != 0)
+                stage.context.stroke();
+            }
+    };
+
+})();
+
+(function() {
+
+    window.Rectangle = {
+
+        init: function(x, y, width, height, style) {
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+            this.style = style;
+        },
+
+        draw: function(stage) {
+            var halfWidth = this.width / 2;
+            var halfHeight = this.height / 2;
+
+            stage.context.strokeStyle = this.style.stroke.toRGBAString(25, 240, 252, 0.5);
+            stage.context.lineWidth = this.style.strokeWeight;
+            stage.context.fillStyle = this.style.fill.toRGBAString(25, 240, 252, 0.5);
+            stage.context.beginPath();
+
+            stage.context.moveTo(this.x - halfWidth, this.y - halfHeight);
+            stage.context.lineTo(this.x + halfWidth, this.y - halfHeight);
+            stage.context.lineTo(this.x + halfWidth, this.y + halfHeight);
+            stage.context.lineTo(this.x - halfWidth, this.y + halfHeight);
+            stage.context.lineTo(this.x - halfWidth, this.y - halfHeight);
+
+            if (this.style.fill.alpha != 0)
+                stage.context.fill();
+            if (this.style.stroke.alpha != 0)
+                stage.context.stroke();
+        }
+    };
+
+})();
+
 
 (function($) {
 
@@ -3080,36 +3066,16 @@ $.Chain.extend('items', {
         $('#stage-refresh').click(redrawStage);
     });
 })(jQuery);
-﻿(function() {
 
-    window.Utils = {
+(function() {
 
-        random: function(min, max) {
-            return Math.floor((max - min - 1) * Math.random()) + min;
-        },
+    window.Style = {
 
-        toArray: function(enumerable) {
-            return Array.prototype.slice.call(enumerable);
+        init: function(strokeColor, fillColor) {
+            this.strokeColor = strokeColor;
+            this.fillColor = fillColor;
         }
 
-    }
-
-    if (typeof Object.create !== 'function') {
-        Object.create = function(theType) {
-            function F() {};
-            F.prototype = theType;
-            return new F();
-        }
-    }
-
-    Function.prototype.curry = function() {
-        if (arguments.length < 1) return this;
-
-        var self = this;
-        var args = Utils.toArray(args);
-        return function() {
-            return self.apply(this, args.concat(Utils.toArray(arguments)));
-        }
     }
 
 })();

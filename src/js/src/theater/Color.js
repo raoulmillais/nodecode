@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
     window.Color = {
         init: function(red, green, blue, alpha) {
             this.red = red;

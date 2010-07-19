@@ -1,16 +1,16 @@
 //= require <jquery-1.4.2>
 //= require <chain.js>
-//= require "../Object"
-//= require "../Stage"
-//= require "../Animation"
-//= require "../Color"
-//= require "../Circle"
-//= require "../Rectangle"
+//= require "Object"
+//= require "theater/Stage"
+//= require "theater/Animation"
+//= require "theater/Color"
+//= require "theater/Circle"
+//= require "theater/Rectangle"
 
-//= require "ColorPicker"
-//= require "Dock"
-//= require "ShapeSelector"
-//= require "PropertiesEditor"
+//= require "jquery/ColorPicker"
+//= require "jquery/Dock"
+//= require "jquery/ShapeSelector"
+//= require "jquery/PropertiesEditor"
 
 (function($) {
     
