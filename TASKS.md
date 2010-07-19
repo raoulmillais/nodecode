@@ -3,6 +3,7 @@ Immediate
 
 # Create class to represent drawing surface, encapsulating stage
 # Create controller to coordinate communication between widgets
+# Fix Rectangle rendering bug (top left corner not joining)
 
 Mid-term
 --------
@@ -48,6 +49,22 @@ Manages service lifecycle and allows access to services:
 Services
 ========
 
+Should Toolbox and styles be grouped as part of the same service? (since they are mutually exclusive when determining
+what to add to the stage.
+
+Should there be a single persistence service or separate for settings projects?
+
+Should we persist per project settings separately?
+
+* getSettings()
+    * saveSettings(key, value)
+    * loadSettings(key)
+
+* getProjects()
+    * listProjects()
+    * saveProject(name, project)
+    * loadProject(name)
+
 * getToolbox()
     * selectedTool
     * addTool()
@@ -61,6 +78,9 @@ Services
     * redo()
     
 * getActors()
+    * select(actor)
+    * select(callback) [event]
+
 * getProperties()
 * getStyles()
     * selectedStyle

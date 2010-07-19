@@ -1,12 +1,16 @@
 //= require <jquery-1.4.2>
 //= require <chain.js>
+//= require "../Object"
 //= require "../Stage"
 //= require "../Animation"
 //= require "../Color"
 //= require "../Circle"
+//= require "../Rectangle"
 
-//= require "../ColorPicker"
-//= require "../ShapeSelector"
+//= require "ColorPicker"
+//= require "Dock"
+//= require "ShapeSelector"
+//= require "PropertiesEditor"
 
 (function($) {
     
@@ -48,6 +52,7 @@
         });
         
         $canvas.click(function(evt) {
+            // TODO: Remove dependency on specific UI elements and get data from services
             var strokeColor = $strokeColorPicker.data('SelectedColor'),
                 fillColor = $fillColorPicker.data('SelectedColor'),
                 selectedShape = $shapeSelector.data('SelectedShape'),
@@ -72,7 +77,7 @@
             newShapeAnimation.init(stage, 2000, newX, newX + 300, newShape, 'x', false, Easing.easeOutSine); 
 
             // add the new ball to the actors palette
-            $actors.items('add', { name: selectedShape, obj: newShape });
+            $actors.items('add', { name: selectedShape, obj: newShape, animations: [ newShapeAnimation ] });
             // re-initalise scrollbars
             $('.palette .content').jScrollPane({
                 scrollbarWidth: 5,

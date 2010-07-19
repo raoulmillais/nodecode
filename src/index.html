@@ -10,26 +10,7 @@
     <![endif]-->
     <title>Canvas IDE</title>
     <link href="css/main.css" rel="stylesheet" type="text/css" />
-
-    <script type="text/javascript" src="js/lib/jquery-1.4.2.min.js"></script>
-    <script type="text/javascript" src="js/lib/chain.js"></script>
-    <script type="text/javascript" src="js/lib/interaction.js"></script>
-    <script type="text/javascript" src="js/lib/jScrollPane-1.2.3.min.js"></script>
-    <script type="text/javascript" src="js/lib/jquery.mousewheel.js"></script>
-    
-    <script type="text/javascript" src="js/src/Utils.js"></script>
-    <script type="text/javascript" src="js/src/Color.js"></script>
-    <script type="text/javascript" src="js/src/Circle.js"></script>
-    <script type="text/javascript" src="js/src/Rectangle.js"></script>
-    <script type="text/javascript" src="js/src/Stage.js"></script>
-    <script type="text/javascript" src="js/src/Easing.js"></script>
-    <script type="text/javascript" src="js/src/Animation.js"></script>
-
-    <script type="text/javascript" src="js/src/ui/Dock.js"></script>
-    <script type="text/javascript" src="js/src/ui/ColorPicker.js"></script>
-    <script type="text/javascript" src="js/src/ui/PropertiesEditor.js"></script>
-    <script type="text/javascript" src="js/src/ui/ShapeSelector.js"></script>
-    <script type="text/javascript" src="js/src/ui/Program.js"></script>
+    <script type="text/javascript" src="../build/combined.js"></script>
 </head>
 
 <body>
@@ -87,7 +68,14 @@
                 <h3>Actors</h3>
                 <div class="content">
                     <ul id="actors">
-                        <li class="item"><span class="name"></span></li>
+                        <li class="item">
+                            <span class="name"></span>
+                            <ul class="animations">
+                                <li class="item">
+                                    <span class="startValue"></span>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </div> <!-- content -->
             </div>
