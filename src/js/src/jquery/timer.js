@@ -47,19 +47,21 @@
                     this.$minutes.text(newMinutes);
                     this.$seconds.text(newSeconds);
                     this.$milliSeconds.text(newMilliseconds);
+                    
+                    return $self;
                 },
                 
                 start: function() {
-                    $self.addClass(options.startedClass);
+                    return $self.addClass(options.startedClass);
                 },
                 
                 stop: function() {
-                    $self.removeClass(options.startedClass);
+                    return $self.removeClass(options.startedClass);
                 },
                 
                 rewind: function() {
                     this.update(0);
-                    this.stop();
+                    return this.stop();
                 }
             });
         

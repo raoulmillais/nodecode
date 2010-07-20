@@ -10,6 +10,7 @@
 //= require "jquery/ColorPicker"
 //= require "jquery/Scrollable"
 //= require "jquery/ShapeSelector"
+//= require "jquery/ProjectViewer"
 //= require "jquery/PropertiesEditor"
 //= require "jquery/Timer"
 
@@ -17,7 +18,7 @@
     
     $(document).ready(function() {
         var $canvas = $('#tile-canvas'),
-            $actors = $('#actors'),
+            $projectViewer = $('#project-viewer'),
             $strokeColorPicker = $('#stroke-color'),
             $fillColorPicker = $('#fill-color'),
             $shapeSelector = $('#shapes'),
@@ -61,7 +62,8 @@
             newShapeAnimation.init(stage, 2000, newX, newX + 300, newShape, 'x', false, theater.Easing.easeOutSine); 
 
             // add the new ball to the actors palette
-            $actors.items('add', { name: selectedShape, obj: newShape, animations: [ newShapeAnimation ] });
+            //$actors.items('add', { name: selectedShape, obj: newShape, animations: [ newShapeAnimation ] });
+            $projectViewer.projectViewer('add', { name: selectedShape, obj: newShape, animations: [ newShapeAnimation ] });
             
             // re-initalise palette scrollbars
             $('.palette .content').scrollable();
@@ -96,19 +98,14 @@
         
         
         console.log('Initialising actors palette');
-        $('#actors').items([]).chain(function() {
-            var model = this.item();
-
-            $(this).click(function() {
-                var $self = $(this);
-                $('#actors li').removeClass('selected');
-                $self.toggleClass('selected');
+        $projectViewer.projectViewer({ 
+            selectionChange: function(item) {
                 $('#properties-palette').propertiesEditor({ 
-                    title: model.name + ' Properties', 
-                    model: model.obj, 
+                    title: item.name + ' Properties', 
+                    model: item.obj, 
                     propertyChange: redrawStage
                 });
-            });
+            }
         });
 
         console.log('Initialising tools palette');
