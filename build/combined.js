@@ -227,6 +227,75 @@ e&&e.document?e.document.compatMode==="CSS1Compat"&&e.document.documentElement["
     };
 
 })(jQuery);
+
+(function($) {
+
+    $.fn.propertiesEditor = function(options) {
+        var $self = this,
+            $list = $('<ul></ul>'),
+            $title = $('<h3></h3>').addClass(options.titleClass),
+            $label,
+            $item,
+            $edit;
+
+        options = $.extend($.fn.propertiesEditor.defaults, options);
+
+        if (!options.model) return this;
+
+        this.data('PropertiesEditor', options.model);
+
+        this.empty()
+
+        $title.appendTo(this).html(options.title);
+        for(var prop in options.model) {
+            if (typeof options.model[prop] !== 'function') {
+                $edit = $('<input></input>')
+                    .addClass(options.propertyValueClass)
+                    .attr('type', 'text')
+                    .attr('name', prop)
+                    .attr('value', options.model[prop]);
+
+                if (typeof options.model[prop] === 'object')
+                    $edit.attr('readonly', 'true');
+
+                $label = $('<label></labell>').attr('for', prop).addClass(options.propertyLabelClass).text(prop);
+                $item = $('<li></li>').css('clear', 'both');
+                $label.appendTo($item);
+                $edit.appendTo($item);
+                $item.appendTo($list);
+
+                if (typeof options.model[prop] !== 'object') {
+                    $edit.blur(function() {
+                        var oldValue = options.model[this.name],
+                            newValue = $(this).val();
+
+                        if (newValue != oldValue) {
+                            console.log('Changing ' + this.name + ' to ' + newValue);
+                            if (typeof oldValue === 'number') newValue = parseInt(newValue);
+                            options.model[this.name] = newValue;
+                        }
+
+                        $.isFunction(options.propertyChange) && options.propertyChange.call($self);
+                    });
+                }
+            }
+        }
+
+        $list.appendTo(this);
+
+        return this;
+    }
+
+    $.fn.propertiesEditor.defaults = {
+        title: 'Properties',
+        titleClass: 'name',
+        propertyLabelClass: 'property-label',
+        propertyValueClass: 'property-value',
+        propertyChange: null
+    }
+
+
+})(jQuery);
 /* Copyright (c) 2006 Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
  * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
  * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
@@ -311,90 +380,41 @@ $.fn.extend({
 
 (function($) {
 
-    $.fn.dock = function() {
+    $.fn.scrollable = function(options) {
+        var self = this,
+            delayedInitId;
 
-        return this.each(function() {
-            var $self = $(this);
+        options = $.extend($.fn.scrollable.defaults, options);
 
-            $self.find('.content').jScrollPane({
-                scrollbarWidth: 5,
-                scrollbarMargin: 5,
-                showArrows: false
+        if (options.reInitialiseOnResize) {
+            $(window).resize(function() {
+                var ctx = self;
+
+                window.clearTimeout(delayedInitId);
+                delayedInitId = window.setTimeout(function() {
+                    initialiseJScrollPane(self);
+                }, 10)
             });
-
-            $self.data('Dock', { palettes: $self.find('.palette') });
-        });
-
-    }
-
-})(jQuery);
-
-(function($) {
-
-    $.fn.propertiesEditor = function(options) {
-        var $self = this,
-            $list = $('<ul></ul>'),
-            $title = $('<h3></h3>').addClass(options.titleClass),
-            $label,
-            $item,
-            $edit;
-
-        options = $.extend($.fn.propertiesEditor.defaults, options);
-
-        if (!options.model) return this;
-
-        this.data('PropertiesEditor', options.model);
-
-        this.empty()
-
-        $title.appendTo(this).html(options.title);
-        for(var prop in options.model) {
-            if (typeof options.model[prop] !== 'function') {
-                $edit = $('<input></input>')
-                    .addClass(options.propertyValueClass)
-                    .attr('type', 'text')
-                    .attr('name', prop)
-                    .attr('value', options.model[prop]);
-
-                if (typeof options.model[prop] === 'object')
-                    $edit.attr('readonly', 'true');
-
-                $label = $('<label></labell>').attr('for', prop).addClass(options.propertyLabelClass).text(prop);
-                $item = $('<li></li>').css('clear', 'both');
-                $label.appendTo($item);
-                $edit.appendTo($item);
-                $item.appendTo($list);
-
-                if (typeof options.model[prop] !== 'object') {
-                    $edit.blur(function() {
-                        var oldValue = options.model[this.name],
-                            newValue = $(this).val();
-
-                        if (newValue != oldValue) {
-                            console.log('Changing ' + this.name + ' to ' + newValue);
-                            if (typeof oldValue === 'number') newValue = parseInt(newValue);
-                            options.model[this.name] = newValue;
-                        }
-
-                        $.isFunction(options.propertyChange) && options.propertyChange.call($self);
-                    });
-                }
-            }
         }
+        return initialiseJScrollPane(self);
 
-        $list.appendTo(this);
+        function initialiseJScrollPane(ctx) {
+            return ctx.each(function() {
+                var $self = $(this);
+                console.log('  initialising scrollable');
+                console.log(this);
+                $self.jScrollPane({
+                    scrollbarWidth: 5,
+                    scrollbarMargin: 15,
+                    showArrows: false
+                });
+            });
+        }
+    };
 
-        return this;
-    }
-
-    $.fn.propertiesEditor.defaults = {
-        title: 'Properties',
-        titleClass: 'name',
-        propertyLabelClass: 'property-label',
-        propertyValueClass: 'property-value',
-        propertyChange: null
-    }
-
+    $.fn.scrollable.defaults = {
+        reInitialiseOnResize: false
+    };
 
 })(jQuery);
 
@@ -427,6 +447,82 @@ $.fn.extend({
 
         return this;
     };
+
+})(jQuery);
+
+(function($) {
+
+    $.fn.timer = function(options) {
+        if (typeof options === 'string') {
+            var obj = this.data('timer'),
+                args,
+                action;
+
+            if (!obj) return $().eq(-1);
+
+            action = obj[options];
+
+            if (typeof action === 'function') {
+                console.log('timer action: ' +  options);
+                args = Array.prototype.slice.call(arguments, 1);
+                console.log('args: ' + args);
+
+                action.apply(obj, args);
+                return this;
+            } else {
+                return $().eq(-1);
+            }
+        }
+
+
+        options = $.extend($.fn.timer.defaults, options);
+
+        return this.each(function() {
+            var $self = $(this),
+                $minutes = $self.find(options.minutesSelector),
+                $seconds = $self.find(options.secondsSelector),
+                $milliSeconds = $self.find(options.milliSecondsSelector);
+
+            $self.data('timer', {
+                $seconds: $seconds,
+                $minutes: $minutes,
+                $milliSeconds: $milliSeconds,
+
+                update: function(newMilliSeconds) {
+                    console.log('updating: ' + newMilliseconds);
+                    var newMinutes = Math.floor(newMilliSeconds / 60000),
+                        newSeconds = Math.floor((newMilliSeconds - (newMinutes * 60000)) / 1000),
+                        newMilliseconds = newMilliSeconds - ((newSeconds * 1000) + (newMinutes * 60000));
+
+                    this.$minutes.text(newMinutes);
+                    this.$seconds.text(newSeconds);
+                    this.$milliSeconds.text(newMilliseconds);
+                },
+
+                start: function() {
+                    $self.addClass(options.startedClass);
+                },
+
+                stop: function() {
+                    $self.removeClass(options.startedClass);
+                },
+
+                rewind: function() {
+                    this.update(0);
+                    this.stop();
+                }
+            });
+
+        });
+
+    };
+
+    $.fn.timer.defaults = {
+        minutesSelector: '.minutes',
+        secondsSelector: '.seconds',
+        milliSecondsSelector: '.milliseconds',
+        startedClass: 'started'
+    }
 
 })(jQuery);
 /**
@@ -2992,36 +3088,18 @@ $.Chain.extend('items', {
             $strokeColorPicker = $('#stroke-color'),
             $fillColorPicker = $('#fill-color'),
             $shapeSelector = $('#shapes'),
+            $timer = $('#stage-timer'),
             stage = Object.create(theater.Stage),
             redrawStage;
 
         stage.init('tile-canvas', 20, 400, function() {
-            var newMinutes = Math.floor(this.time / 60000),
-                newSeconds = Math.floor((this.time - (newMinutes * 60000)) / 1000),
-                newMilliseconds = this.time - ((newSeconds * 1000) + (newMinutes * 60000));
-
-            $('#stage-time').val(newMinutes + 'm ' + newSeconds + 's ' + newMilliseconds + 'ms');
+            $timer.timer('update', this.time);
         });
 
         window.stage = stage;
         redrawStage = function() {
             stage.draw();
         }
-
-        $('#actors').items([]).chain(function() {
-            var model = this.item();
-
-            $(this).click(function() {
-                var $self = $(this);
-                $('#actors li').removeClass('selected');
-                $self.toggleClass('selected');
-                $('#properties-palette').propertiesEditor({
-                    title: model.name + ' Properties',
-                    model: model.obj,
-                    propertyChange: redrawStage
-                });
-            });
-        });
 
         $canvas.click(function(evt) {
             var strokeColor = $strokeColorPicker.data('SelectedColor'),
@@ -3047,11 +3125,8 @@ $.Chain.extend('items', {
             newShapeAnimation.init(stage, 2000, newX, newX + 300, newShape, 'x', false, theater.Easing.easeOutSine);
 
             $actors.items('add', { name: selectedShape, obj: newShape, animations: [ newShapeAnimation ] });
-            $('.palette .content').jScrollPane({
-                scrollbarWidth: 5,
-                scrollbarMargin: 5,
-                showArrows: false
-            });
+
+            $('.palette .content').scrollable();
 
             stage.actors.push(newShape);
             stage.animations.push(newShapeAnimation);
@@ -3059,21 +3134,60 @@ $.Chain.extend('items', {
             if (stage.isRunning) newShapeAnimation.start();
         });
 
-        $('.palette .content').jScrollPane({
-            scrollbarWidth: 5,
-            scrollbarMargin: 5,
-            showArrows: false
+
+        console.log('Initialising palettes');
+        $('.palette .content').scrollable();
+
+
+        console.log('Innitialising editor');
+        function resizeViewport() {
+            var editorHeight = $(window).height() - $('#top-activity-bar').height() - $('#bottom-dock').height() - 20;
+            var editorWidth = $(window).width() - $('#right-dock').width();
+            $('#editor').height(editorHeight);
+            $('#editor').width(editorWidth);
+        }
+        resizeViewport();
+        $(window).resize(resizeViewport);
+        $('#editor').scrollable();
+
+
+        console.log('Initialising docks');
+        $('.dock > .content').scrollable({ reInitialiseOnResize: true });
+
+
+        console.log('Initialising actors palette');
+        $('#actors').items([]).chain(function() {
+            var model = this.item();
+
+            $(this).click(function() {
+                var $self = $(this);
+                $('#actors li').removeClass('selected');
+                $self.toggleClass('selected');
+                $('#properties-palette').propertiesEditor({
+                    title: model.name + ' Properties',
+                    model: model.obj,
+                    propertyChange: redrawStage
+                });
+            });
         });
 
-        $('.dock').dock();
-
+        console.log('Initialising tools palette');
         $('.color-picker').colorPicker();
         $shapeSelector.shapeSelector();
-        $('#stage-start').click(function() { stage.start(); });
-        $('#stage-stop').click(function() { stage.stop(); });
+
+        console.log('Initialising stage controls');
+        $timer.timer();
+        $('#stage-start').click(function() {
+            stage.start();
+            $timer.timer('start');
+        });
+        $('#stage-stop').click(function() {
+            stage.stop();
+            $timer.timer('stop');
+        });
         $('#stage-rewind').click(function() {
             stage.rewind();
-            $('#stage-time').val('0m 0s 0ms');
+            $timer.timer('rewind');
         });
         $('#stage-refresh').click(redrawStage);
     });

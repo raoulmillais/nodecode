@@ -25,15 +25,23 @@ abbr,acronym { border:0; }
 
 body { background: #19191a; font-family:Helvetica,Verdana,Arial,sans-serif; font-size:14px; font-weight: bold; color: #656665; margin:0; position: relative; }
 
-canvas { border: 10px solid #252525; width: 400px; float: left; z-index: 0; position: fixed; top: 50px; left: 20px; }
-
-header.site h1 { font-family:"Lobster", arial, serif; font-size:40px; color: #c9ff20; margin: 10px 10px 0 10px; }
-header.site h2 { color: #656665; font-size: 16px; margin: 0 10px 10px 10px;}
+canvas { border: 10px solid #252525; width: 400px; float: left; z-index: 0; position: relative; top: 10px; left: 10px; }
 
 /* STRUCTURE: =common
 ------------------------------------------------------- */
 .slim { width: 150px; height: 200px; overflow: auto; }
 .fat { float: left; clear: both; width: 396px; height: 100px; overflow: auto; margin: 10px 0; }
+
+/* STRUCTURE: =top-activity-bar
+------------------------------------------------------- */
+#top-activity-bar { position: fixed; top: 0; left: 0; height: 75px; width: 100%; border-bottom: 10px solid #252525; z-index: 2; }
+#stage-control { float: right; margin-right: 220px;  }
+
+/* STRUCTURE: =editor
+------------------------------------------------------- */
+#editor { margin: 0 210px 160px 0; z-index: 0; }
+#editor .content { width: 10000px; height: 10000px; z-index: 0; }
+#editor-container .jScrollPaneContainer { margin-top: 95px; margin-right: 220px; }
 
 /* STRUCTURE: =dock
 ------------------------------------------------------- */
@@ -43,6 +51,16 @@ header.site h2 { color: #656665; font-size: 16px; margin: 0 10px 10px 10px;}
 #bottom-dock > .content { height: 150px; }
 #right-dock { border-left: 10px solid #252525; position: fixed; height: 100%; width: 200px; top: 0; right: 0; z-index: 2; }
 #right-dock > .content { height: 100%; width: 200px; }
+
+/* COMPONENT: =stage-timer
+------------------------------------------------------- */
+#stage-timer.started { color: #fff; }
+#stage-timer { font-size: 36px; margin: 10px; font-weight: normal; }
+#stage-timer .milliseconds, #stage-timer .seconds, #stage-timer .minutes { font-weight: normal; }
+
+/* COMPONENT: =activity-bar
+------------------------------------------------------- */
+h1.logo { font-family:"Lobster", arial, serif; font-size:40px; float: left; color: #c9ff20; margin: 10px 10px 0 10px; }
 
 /* COMPONENT: =palette
 ------------------------------------------------------- */

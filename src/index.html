@@ -14,16 +14,27 @@
 </head>
 
 <body>
-    <header class="site">
-        <hgroup>
-            <h1>Canvas IDE</h1>
-        </hgroup>
-    </header>
-    <canvas id="tile-canvas" width="400" height="400">
-        <div>
-            Your browser does not support canvas
-        </div>
-    </canvas>
+    
+    <div id="top-activity-bar" class="dock">
+        <h1 class="logo">WebScenator</h1>
+        <section id="stage-control">
+            <p id="stage-timer">
+                <span class="minutes">0</span>m <span class="seconds">0</span>s <span class="milliseconds">0</span>ms
+            </p>
+        </section>
+    </div>
+    
+    <div id="editor-container">
+        <div id="editor">
+            <div class="content">
+                <canvas id="tile-canvas" width="400" height="400">
+                    <div>
+                        Your browser does not support canvas
+                    </div>
+                </canvas>
+            </div> <!-- content -->
+        </div> <!-- editor -->
+    </div> <!-- editor-container -->
     
     <div id="right-dock" class="dock">
         <div class="content">
@@ -96,9 +107,6 @@
                         <input type="button" id="stage-start" value="Start" class="update" />
                         <input type="button" id="stage-stop" value="Stop" class="update" />
                         <input type="button" id="stage-rewind" value="Rewind" class="update" />
-                        <input type="text" id="stage-time" value="0m 0s 0ms" class="update" readonly="readonly" />
-                    </p>
-                    <p>
                         <input type="button" id="stage-refresh" value="Refresh" class="update" />
                     </p>
                 </form>

@@ -8,9 +8,10 @@
 //= require "theater/Rectangle"
 
 //= require "jquery/ColorPicker"
-//= require "jquery/Dock"
+//= require "jquery/Scrollable"
 //= require "jquery/ShapeSelector"
 //= require "jquery/PropertiesEditor"
+//= require "jquery/Timer"
 
 (function($) {
     
@@ -20,36 +21,19 @@
             $strokeColorPicker = $('#stroke-color'),
             $fillColorPicker = $('#fill-color'),
             $shapeSelector = $('#shapes'),
+            $timer = $('#stage-timer'),
             stage = Object.create(theater.Stage),
             redrawStage;
-            
+
+        // Initialise stage
         stage.init('tile-canvas', 20, 400, function() {
-            var newMinutes = Math.floor(this.time / 60000),
-                newSeconds = Math.floor((this.time - (newMinutes * 60000)) / 1000),
-                newMilliseconds = this.time - ((newSeconds * 1000) + (newMinutes * 60000));
-            
-            $('#stage-time').val(newMinutes + 'm ' + newSeconds + 's ' + newMilliseconds + 'ms');
+            $timer.timer('update', this.time);
         });
         
         window.stage = stage;
         redrawStage = function() {
             stage.draw();
         }
-        
-        $('#actors').items([]).chain(function() {
-            var model = this.item();
-
-            $(this).click(function() {
-                var $self = $(this);
-                $('#actors li').removeClass('selected');
-                $self.toggleClass('selected');
-                $('#properties-palette').propertiesEditor({ 
-                    title: model.name + ' Properties', 
-                    model: model.obj, 
-                    propertyChange: redrawStage
-                });
-            });
-        });
         
         $canvas.click(function(evt) {
             // TODO: Remove dependency on specific UI elements and get data from services
@@ -78,12 +62,9 @@
 
             // add the new ball to the actors palette
             $actors.items('add', { name: selectedShape, obj: newShape, animations: [ newShapeAnimation ] });
-            // re-initalise scrollbars
-            $('.palette .content').jScrollPane({
-                scrollbarWidth: 5,
-                scrollbarMargin: 5,
-                showArrows: false
-            });
+            
+            // re-initalise palette scrollbars
+            $('.palette .content').scrollable();
             
             // put the ball on the stage
             stage.actors.push(newShape);
@@ -92,21 +73,61 @@
             if (stage.isRunning) newShapeAnimation.start();
         });
         
-        $('.palette .content').jScrollPane({
-            scrollbarWidth: 5,
-            scrollbarMargin: 5,
-            showArrows: false
+        
+        // Initialise UI
+        console.log('Initialising palettes');
+        $('.palette .content').scrollable();
+        
+        
+        console.log('Innitialising editor');
+        function resizeViewport() {
+            var editorHeight = $(window).height() - $('#top-activity-bar').height() - $('#bottom-dock').height() - 20;
+            var editorWidth = $(window).width() - $('#right-dock').width();
+            $('#editor').height(editorHeight);
+            $('#editor').width(editorWidth);
+        }
+        resizeViewport();
+        $(window).resize(resizeViewport);
+        $('#editor').scrollable();
+
+        
+        console.log('Initialising docks');
+        $('.dock > .content').scrollable({ reInitialiseOnResize: true });
+        
+        
+        console.log('Initialising actors palette');
+        $('#actors').items([]).chain(function() {
+            var model = this.item();
+
+            $(this).click(function() {
+                var $self = $(this);
+                $('#actors li').removeClass('selected');
+                $self.toggleClass('selected');
+                $('#properties-palette').propertiesEditor({ 
+                    title: model.name + ' Properties', 
+                    model: model.obj, 
+                    propertyChange: redrawStage
+                });
+            });
         });
-        
-        $('.dock').dock();
-        
+
+        console.log('Initialising tools palette');
         $('.color-picker').colorPicker();
         $shapeSelector.shapeSelector();
-        $('#stage-start').click(function() { stage.start(); });
-        $('#stage-stop').click(function() { stage.stop(); });
+        
+        console.log('Initialising stage controls');
+        $timer.timer();
+        $('#stage-start').click(function() { 
+            stage.start(); 
+            $timer.timer('start');
+        });
+        $('#stage-stop').click(function() { 
+            stage.stop(); 
+            $timer.timer('stop');
+        });
         $('#stage-rewind').click(function() { 
             stage.rewind(); 
-            $('#stage-time').val('0m 0s 0ms');
+            $timer.timer('rewind');
         });
         $('#stage-refresh').click(redrawStage);
     });
