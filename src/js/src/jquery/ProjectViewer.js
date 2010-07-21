@@ -32,10 +32,10 @@
             $self.items([]).chain(function() {
                 var model = this.item();
 
-                $(this).click(function() {
-                    var $self = $(this);
+                $(this).bind('click.projectViewer', function() {
+                    var $clicked = $(this);
                     $self.find('li').removeClass(options.selectedClass);
-                    $self.toggleClass(options.selectedClass);
+                    $clicked.toggleClass(options.selectedClass);
                     
                     $.isFunction(options.selectionChange) && options.selectionChange.call($self, model)
                 });
@@ -44,9 +44,14 @@
             $self.data('ProjectViewer', {
                 $container: $self,
                 
-                add: function (item) {
+                add: function(item) {
                     console.log('Item added: ' + item);
                     return this.$container.items('add', item);
+                },
+                
+                destroy: function() {
+                    this.$container.children().unbind('.projectViewer');
+                    return $().eq(-1);
                 }
             });
         });

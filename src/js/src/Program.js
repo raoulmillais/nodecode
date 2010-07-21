@@ -81,7 +81,7 @@
         $('.palette .content').scrollable();
         
         
-        console.log('Innitialising editor');
+        console.log('Initialising editor');
         function resizeViewport() {
             var editorHeight = $(window).height() - $('#top-activity-bar').height() - $('#bottom-dock').height() - 20;
             var editorWidth = $(window).width() - $('#right-dock').width();

@@ -4,18 +4,20 @@
 
 (function($) {
 
-    $.fn.colorPicker = function() {
+    $.fn.colorPicker = function(options) {
+
+        options = $.extend($.fn.colorPicker.defaults, options);
 
         return this.each(function() {
 
             var $self = $(this),
-                color = selectColor($self.children('li.selected').get());
+                color = selectColor($self.children(options.colorElementSelector + '.' + options.selectedClass).get());
 
             $self.data('SelectedColor', color);
             
-            $self.children('li').click(function() {
-                $self.children('li').removeClass('selected');
-                $(this).toggleClass('selected');
+            $self.children(options.colorElementSelector).bind('click.colorPicker', function() {
+                $self.children('li').removeClass(options.selectedClass);
+                $(this).toggleClass(options.selectedClass);
                 $self.data('SelectedColor', selectColor(this));
             });        
             
@@ -37,6 +39,11 @@
             }
             
         });
+    };
+    
+    $.fn.colorPicker.defaults = {
+        colorElementSelector: 'li',
+        selectedClass: 'selected'
     };
     
 })(jQuery);

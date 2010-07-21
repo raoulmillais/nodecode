@@ -1,4 +1,5 @@
 //= require <jquery-1.4.2>
+//= require <jquery.color>
 
 (function($) {
 
@@ -31,12 +32,14 @@
             var $self = $(this),
                 $minutes = $self.find(options.minutesSelector),
                 $seconds = $self.find(options.secondsSelector),
-                $milliSeconds = $self.find(options.milliSecondsSelector);
+                $milliSeconds = $self.find(options.milliSecondsSelector),
+                originalColor = $self.css('color');
             
             $self.data('timer', {
                 $seconds: $seconds,
                 $minutes: $minutes,
                 $milliSeconds: $milliSeconds,
+                originalColor: originalColor,
                 
                 update: function(newMilliSeconds) {
                     console.log('updating: ' + newMilliseconds);
@@ -52,11 +55,11 @@
                 },
                 
                 start: function() {
-                    return $self.addClass(options.startedClass);
+                    return $self.stop().animate({ 'color': '#fff' }, 'fast');
                 },
                 
                 stop: function() {
-                    return $self.removeClass(options.startedClass);
+                    return $self.stop().animate({ 'color': this.originalColor }, 'fast');
                 },
                 
                 rewind: function() {
