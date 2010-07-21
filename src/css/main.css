@@ -30,7 +30,7 @@ canvas { border: 10px solid #252525; width: 400px; float: left; z-index: 0; posi
 /* STRUCTURE: =common
 ------------------------------------------------------- */
 .slim { width: 150px; height: 200px; overflow: auto; }
-.fat { float: left; clear: both; width: 396px; height: 100px; overflow: auto; margin: 10px 0; }
+.fat { width: 496px; height: 100px; overflow: auto; margin: 10px 0; }
 
 /* STRUCTURE: =top-activity-bar
 ------------------------------------------------------- */
@@ -49,6 +49,9 @@ canvas { border: 10px solid #252525; width: 400px; float: left; z-index: 0; posi
 
 #bottom-dock { border-top: 10px solid #252525; position: fixed; height: 150px; width: 100%; bottom: 0; left: 0; }
 #bottom-dock > .content { height: 150px; }
+
+#bottom-dock .palette { float: left; }
+
 #right-dock { border-left: 10px solid #252525; position: fixed; height: 100%; width: 200px; top: 0; right: 0; z-index: 2; }
 #right-dock > .content { height: 100%; width: 200px; }
 
@@ -67,7 +70,8 @@ h1.logo { font-family:"Lobster", arial, serif; font-size:40px; float: left; colo
 .palette { border: 10px solid #252525; padding: 2px; margin: 10px 10px 0 10px; }
 .palette h3 { background: #252525; margin: 0 0 5px 0; padding: 5px; font-size: 11px; font-weight: bold; }
 .palette h4 { font-size: 11px; }
-.palette .content { overflow: hidden; width: 150px; height: 170px; }
+.palette.slim .content { overflow: hidden; width: 150px; height: 170px; }
+.palette.fat .content { overflow: hidden; width: 496px; height: 71px; }
 
 /* COMPONENT: =jScrollPane
 ------------------------------------------------------- */
@@ -81,7 +85,7 @@ a.jScrollArrowUp:hover { /*background-color: #f60;*/}
 a.jScrollArrowDown { display: block; position: absolute; z-index: 1; bottom: 0; right: 0; text-indent: -2000px; overflow: hidden; /*background-color: #666;*/ height: 9px;}
 a.jScrollArrowDown:hover { /*background-color: #f60;*/}
 a.jScrollActiveArrowButton, 
-a.jScrollActiveArrowButton:hover { /*background-color: #f00;*/}        
+a.jScrollActiveArrowButton:hover { /*background-color: #f00;*/ }        
 
 
 /* COMPONENT: =properties-palette

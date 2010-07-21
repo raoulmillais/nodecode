@@ -18,6 +18,14 @@
     <div id="top-activity-bar" class="dock">
         <h1 class="logo">WebScenator</h1>
         <section id="stage-control">
+            <form>
+                <p>
+                    <input type="button" id="stage-start" value="Start" class="update" />
+                    <input type="button" id="stage-stop" value="Stop" class="update" />
+                    <input type="button" id="stage-rewind" value="Rewind" class="update" />
+                    <input type="button" id="stage-refresh" value="Refresh" class="update" />
+                </p>
+            </form>
             <p id="stage-timer">
                 <span class="minutes">0</span>m <span class="seconds">0</span>s <span class="milliseconds">0</span>ms
             </p>
@@ -75,8 +83,17 @@
                 </div> <!-- content -->
             </div> <!-- style-palette -->
 
-            <div id="project-viewer-palette" class="slim palette">
-                <h3>Actors</h3>
+            <div id="properties-palette" class="slim palette">
+                <h3 class="name">Properties</h3>
+            </div>
+
+        </div> <!-- content -->
+    </div> <!-- right-dock -->
+    
+    <div id="bottom-dock" class="dock">
+        <div class="content">
+            <div id="project-viewer-palette" class="fat palette">
+                <h3>Project</h3>
                 <div class="content">
                     <ul id="project-viewer">
                         <li class="item">
@@ -91,26 +108,7 @@
                 </div> <!-- content -->
             </div>
             
-            <div id="properties-palette" class="slim palette">
-                <h3 class="name">Properties</h3>
-            </div>
 
-        </div> <!-- content -->
-    </div> <!-- right-dock -->
-    
-    <div id="bottom-dock" class="dock">
-        <div class="content">
-            <div id="timeline-palette" class="fat palette">
-                <h3>Timeline</h3>
-                <form>
-                    <p>
-                        <input type="button" id="stage-start" value="Start" class="update" />
-                        <input type="button" id="stage-stop" value="Stop" class="update" />
-                        <input type="button" id="stage-rewind" value="Rewind" class="update" />
-                        <input type="button" id="stage-refresh" value="Refresh" class="update" />
-                    </p>
-                </form>
-            </div> <!-- timeline-palette -->
         </div> <!-- content -->
     </div> <!-- bottom-dock -->
 </body>
