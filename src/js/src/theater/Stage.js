@@ -17,10 +17,11 @@
             
             this.fps = fps;
             this.context = canvas.getContext('2d');
+            this.onDraw = onDraw;
             this.boundCallback = function() { 
                 self.draw.call(self); 
-                if (onDraw) 
-                    onDraw.call(self); 
+                if (self.onDraw) 
+                    self.onDraw.call(self); 
             };
             this.size = size;
             this.isRunning = false;

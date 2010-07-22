@@ -17,19 +17,19 @@
     
     <div id="top-activity-bar" class="dock">
         <h1 class="logo">WebScenator</h1>
-        <section id="stage-control">
+        <div id="stage-control">
             <form>
                 <p>
-                    <input type="button" id="stage-start" value="Start" class="update" />
-                    <input type="button" id="stage-stop" value="Stop" class="update" />
-                    <input type="button" id="stage-rewind" value="Rewind" class="update" />
-                    <input type="button" id="stage-refresh" value="Refresh" class="update" />
+                    <input type="button" value="Start" class="start update" />
+                    <input type="button" value="Stop" class="stop update" />
+                    <input type="button" value="Rewind" class="rewind update" />
+                    <input type="button" value="Refresh" class="refresh update" />
                 </p>
             </form>
-            <p id="stage-timer">
+            <p id="stage-timer" class="timer">
                 <span class="minutes">0</span>m <span class="seconds">0</span>s <span class="milliseconds">0</span>ms
             </p>
-        </section>
+        </div>
     </div>
     
     <div id="editor-container">

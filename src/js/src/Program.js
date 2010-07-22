@@ -7,9 +7,10 @@
 //= require "theater/Circle"
 //= require "theater/Rectangle"
 
-//= require "jquery/Scrollable"
 //= require "jquery/ProjectViewer"
 //= require "jquery/PropertiesEditor"
+//= require "jquery/Scrollable"
+//= require "jquery/StageControl"
 //= require "jquery/Timer"
 
 //= require "webscenator/Environment"
@@ -19,7 +20,6 @@
     $(document).ready(function() {
         var $canvas = $('#tile-canvas'),
             $projectViewer = $('#project-viewer'),
-            $timer = $('#stage-timer'),
             stage = Object.create(theater.Stage),
             environment = Object.create(webscenator.Environment),
             redrawStage;
@@ -27,9 +27,7 @@
         environment.init();    
         
         // Initialise stage
-        stage.init('tile-canvas', 20, 400, function() {
-            $timer.timer('update', this.time);
-        });
+        stage.init('tile-canvas', 20, 400);
         
         window.stage = stage;
         redrawStage = function() {
@@ -106,19 +104,6 @@
         });
 
         console.log('Initialising stage controls');
-        $timer.timer();
-        $('#stage-start').click(function() { 
-            stage.start(); 
-            $timer.timer('start');
-        });
-        $('#stage-stop').click(function() { 
-            stage.stop(); 
-            $timer.timer('stop');
-        });
-        $('#stage-rewind').click(function() { 
-            stage.rewind(); 
-            $timer.timer('rewind');
-        });
-        $('#stage-refresh').click(redrawStage);
+        $('#stage-control').stageControl({ stage: stage });
     });
 })(jQuery);

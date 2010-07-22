@@ -2726,6 +2726,145 @@ $.fn.extend({
     };
 
 })(jQuery);
+
+(function() {
+
+    theater.Stage = {
+
+        animations: [],
+
+        actors: [],
+
+        init: function(canvasId, fps, size,
+                    onDraw /*optional*/) {
+            var self = this,
+                canvas = document.getElementById(canvasId);
+
+            if (!canvas.getContext) return;
+
+            this.fps = fps;
+            this.context = canvas.getContext('2d');
+            this.onDraw = onDraw;
+            this.boundCallback = function() {
+                self.draw.call(self);
+                if (self.onDraw)
+                    self.onDraw.call(self);
+            };
+            this.size = size;
+            this.isRunning = false;
+            this.time = 0;
+        },
+
+        start: function() {
+            if (this.isRunning) return this;
+            this.isRunning = true;
+
+            if (this.context && this.boundCallback && !this.intervalId) {
+                this.intervalId = window.setInterval(this.boundCallback, 1000 / this.fps);
+            }
+
+            for (var j = 0, m = this.animations.length; j < m; j++) {
+                this.animations[j].start();
+            }
+
+            return this;
+        },
+
+        stop: function() {
+            if (!this.isRunning) return this;
+            this.isRunning = false;
+
+            if (this.context && this.boundCallback && this.intervalId) {
+                window.clearInterval(this.intervalId);
+                this.intervalId = undefined;
+            }
+
+            for (var j = 0, m = this.animations.length; j < m; j++) {
+                this.animations[j].stop();
+            }
+
+            return this;
+        },
+
+        rewind: function() {
+            this.stop();
+            for (var j = 0, m = this.animations.length; j < m; j++) {
+                this.animations[j].reset(true);
+            }
+            this.time = 0;
+            this.draw();
+        },
+
+        clear: function() {
+            if (!this.context) return this;
+
+            this.context.clearRect(0, 0, this.size, this.size);
+
+            return this;
+        },
+
+        draw: function() {
+            this.clear();
+
+            for (var i = 0, l = this.actors.length; i < l; i++) {
+                this.actors[i].draw(this);
+            }
+            for (var j = 0, m = this.animations.length; j < m; j++) {
+                this.animations[j].advanceFrame();
+            }
+
+            this.time += 1000 / this.fps;
+            return this;
+        }
+
+    };
+
+})();
+
+(function($) {
+
+    $.fn.stageControl = function(options) {
+
+        options = $.extend($.fn.stageControl.defaults, options);
+        if (!options.stage) return $().eq(-1);
+
+        return this.each(function() {
+            var $self = $(this),
+                $timer = $self.find(options.timerSelector);
+
+            $timer.timer();
+            options.stage.onDraw = function() {
+                $timer.timer('update', this.time);
+            };
+
+            $self.find(options.startSelector).click(function() {
+                stage.start();
+                $timer.timer('start');
+            });
+            $self.find(options.stopSelector).click(function() {
+                stage.stop();
+                $timer.timer('stop');
+            });
+            $self.find(options.rewindSelector).click(function() {
+                stage.rewind();
+                $timer.timer('rewind');
+            });
+            $self.find(options.refreshSelector).click(function() {
+                stage.draw();
+            });
+        });
+
+    };
+
+    $.fn.stageControl.defaults = {
+        timerSelector: '.timer',
+        startSelector: '.start',
+        stopSelector: '.stop',
+        rewindSelector: '.rewind',
+        refreshSelector: '.refresh'
+    };
+
+})(jQuery);
 /*
  * jQuery Color Animations
  * Copyright 2007 John Resig
@@ -2919,99 +3058,6 @@ $.fn.extend({
     }
 
 })(jQuery);
-
-(function() {
-
-    theater.Stage = {
-
-        animations: [],
-
-        actors: [],
-
-        init: function(canvasId, fps, size,
-                    onDraw /*optional*/) {
-            var self = this,
-                canvas = document.getElementById(canvasId);
-
-            if (!canvas.getContext) return;
-
-            this.fps = fps;
-            this.context = canvas.getContext('2d');
-            this.boundCallback = function() {
-                self.draw.call(self);
-                if (onDraw)
-                    onDraw.call(self);
-            };
-            this.size = size;
-            this.isRunning = false;
-            this.time = 0;
-        },
-
-        start: function() {
-            if (this.isRunning) return this;
-            this.isRunning = true;
-
-            if (this.context && this.boundCallback && !this.intervalId) {
-                this.intervalId = window.setInterval(this.boundCallback, 1000 / this.fps);
-            }
-
-            for (var j = 0, m = this.animations.length; j < m; j++) {
-                this.animations[j].start();
-            }
-
-            return this;
-        },
-
-        stop: function() {
-            if (!this.isRunning) return this;
-            this.isRunning = false;
-
-            if (this.context && this.boundCallback && this.intervalId) {
-                window.clearInterval(this.intervalId);
-                this.intervalId = undefined;
-            }
-
-            for (var j = 0, m = this.animations.length; j < m; j++) {
-                this.animations[j].stop();
-            }
-
-            return this;
-        },
-
-        rewind: function() {
-            this.stop();
-            for (var j = 0, m = this.animations.length; j < m; j++) {
-                this.animations[j].reset(true);
-            }
-            this.time = 0;
-            this.draw();
-        },
-
-        clear: function() {
-            if (!this.context) return this;
-
-            this.context.clearRect(0, 0, this.size, this.size);
-
-            return this;
-        },
-
-        draw: function() {
-            this.clear();
-
-            for (var i = 0, l = this.actors.length; i < l; i++) {
-                this.actors[i].draw(this);
-            }
-            for (var j = 0, m = this.animations.length; j < m; j++) {
-                this.animations[j].advanceFrame();
-            }
-
-            this.time += 1000 / this.fps;
-            return this;
-        }
-
-    };
-
-})();
 
 (function() {
 
@@ -3347,16 +3393,13 @@ $.fn.extend({
     $(document).ready(function() {
         var $canvas = $('#tile-canvas'),
             $projectViewer = $('#project-viewer'),
-            $timer = $('#stage-timer'),
             stage = Object.create(theater.Stage),
             environment = Object.create(webscenator.Environment),
             redrawStage;
 
         environment.init();
 
-        stage.init('tile-canvas', 20, 400, function() {
-            $timer.timer('update', this.time);
-        });
+        stage.init('tile-canvas', 20, 400);
 
         window.stage = stage;
         redrawStage = function() {
@@ -3427,20 +3470,7 @@ $.fn.extend({
         });
 
         console.log('Initialising stage controls');
-        $timer.timer();
-        $('#stage-start').click(function() {
-            stage.start();
-            $timer.timer('start');
-        });
-        $('#stage-stop').click(function() {
-            stage.stop();
-            $timer.timer('stop');
-        });
-        $('#stage-rewind').click(function() {
-            stage.rewind();
-            $timer.timer('rewind');
-        });
-        $('#stage-refresh').click(redrawStage);
+        $('#stage-control').stageControl({ stage: stage });
     });
 })(jQuery);
 
