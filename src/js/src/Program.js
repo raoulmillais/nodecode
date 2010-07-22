@@ -7,25 +7,25 @@
 //= require "theater/Circle"
 //= require "theater/Rectangle"
 
-//= require "jquery/ColorPicker"
 //= require "jquery/Scrollable"
-//= require "jquery/ShapeSelector"
 //= require "jquery/ProjectViewer"
 //= require "jquery/PropertiesEditor"
 //= require "jquery/Timer"
+
+//= require "webscenator/Environment"
 
 (function($) {
     
     $(document).ready(function() {
         var $canvas = $('#tile-canvas'),
             $projectViewer = $('#project-viewer'),
-            $strokeColorPicker = $('#stroke-color'),
-            $fillColorPicker = $('#fill-color'),
-            $shapeSelector = $('#shapes'),
             $timer = $('#stage-timer'),
             stage = Object.create(theater.Stage),
+            environment = Object.create(webscenator.Environment),
             redrawStage;
 
+        environment.init();    
+        
         // Initialise stage
         stage.init('tile-canvas', 20, 400, function() {
             $timer.timer('update', this.time);
@@ -38,10 +38,8 @@
         
         $canvas.click(function(evt) {
             // TODO: Remove dependency on specific UI elements and get data from services
-            var strokeColor = $strokeColorPicker.data('SelectedColor'),
-                fillColor = $fillColorPicker.data('SelectedColor'),
-                selectedShape = $shapeSelector.data('SelectedShape'),
-                strokeWeight = parseInt($('#stroke-weight').val()),
+            var selectedShape = environment.toolboxService.getSelectedTool(),
+                selectedStyle = environment.toolboxService.getSelectedStyle(),
                 newShape,
                 newShapeAnimation = Object.create(theater.Animation),
                 newX = evt.pageX - $canvas.offset().left,
@@ -51,18 +49,17 @@
             switch (selectedShape) {
                 case 'Circle':
                     newShape = Object.create(theater.Circle);
-                    newShape.init(newX, newY, 50, { stroke: strokeColor, fill: fillColor, strokeWeight: strokeWeight });
+                    newShape.init(newX, newY, 50, selectedStyle);
                     break;
                 case 'Rectangle':
                     newShape = Object.create(theater.Rectangle);
-                    newShape.init(newX, newY, 75, 50, { stroke: strokeColor, fill: fillColor, strokeWeight: strokeWeight });
+                    newShape.init(newX, newY, 75, 50, selectedStyle);
                     break;
             }
             
             newShapeAnimation.init(stage, 2000, newX, newX + 300, newShape, 'x', false, theater.Easing.easeOutSine); 
 
             // add the new ball to the actors palette
-            //$actors.items('add', { name: selectedShape, obj: newShape, animations: [ newShapeAnimation ] });
             $projectViewer.projectViewer('add', { name: selectedShape, obj: newShape, animations: [ newShapeAnimation ] });
             
             // re-initalise palette scrollbars
@@ -108,10 +105,6 @@
             }
         });
 
-        console.log('Initialising tools palette');
-        $('.color-picker').colorPicker();
-        $shapeSelector.shapeSelector();
-        
         console.log('Initialising stage controls');
         $timer.timer();
         $('#stage-start').click(function() { 

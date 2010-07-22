@@ -11,7 +11,12 @@
         // begin init
         init: function() {
             console.log('Initialising Environment');
+            this.initialiseEditor();
             this.initaliseServices();
+        },
+        
+        initialiseEditor: function() {
+        
         },
         
         initaliseServices: function() {

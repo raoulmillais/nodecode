@@ -3270,17 +3270,89 @@ $.fn.extend({
 })();
 
 
+(function() {
+
+    window.webscenator = { };
+
+})();
+(function() {
+
+    window.webscenator.services = { };
+
+})();
+
+(function($) {
+
+    window.webscenator.services.ToolboxService = {
+
+
+        init: function(environment) {
+            console.log('Initialising webscenator.services.ToolboxService');
+            this.environment = environment;
+
+            console.log(' Initialising ToolboxService UI');
+            this.$strokeColorPicker = $('#stroke-color');
+            this.$fillColorPicker = $('#fill-color');
+            this.$strokeWeight = $('#stroke-weight'),
+            $('.color-picker').colorPicker();
+
+            this.$shapeSelector = $('#shapes').shapeSelector();
+        },
+
+        getSelectedTool: function() {
+            return this.$shapeSelector.data('SelectedShape');
+        },
+
+        getSelectedStyle: function() {
+            return {
+                stroke: this.$strokeColorPicker.data('SelectedColor'),
+                fill: this.$fillColorPicker.data('SelectedColor'),
+                strokeWeight: parseInt(this.$strokeWeight.val())
+            };
+        },
+
+        destroy: function() {
+        }
+
+    };
+
+})(jQuery);
+
+(function($) {
+    var services = webscenator.services;
+
+    window.webscenator.Environment = {
+
+        init: function() {
+            console.log('Initialising Environment');
+            this.initialiseEditor();
+            this.initaliseServices();
+        },
+
+        initialiseEditor: function() {
+
+        },
+
+        initaliseServices: function() {
+            this.toolboxService = Object.create(services.ToolboxService);
+            this.toolboxService.init(this);
+        }
+
+    };
+
+})(jQuery);
+
 (function($) {
 
     $(document).ready(function() {
         var $canvas = $('#tile-canvas'),
             $projectViewer = $('#project-viewer'),
-            $strokeColorPicker = $('#stroke-color'),
-            $fillColorPicker = $('#fill-color'),
-            $shapeSelector = $('#shapes'),
             $timer = $('#stage-timer'),
             stage = Object.create(theater.Stage),
+            environment = Object.create(webscenator.Environment),
             redrawStage;
+
+        environment.init();
 
         stage.init('tile-canvas', 20, 400, function() {
             $timer.timer('update', this.time);
@@ -3292,10 +3364,8 @@ $.fn.extend({
         }
 
         $canvas.click(function(evt) {
-            var strokeColor = $strokeColorPicker.data('SelectedColor'),
-                fillColor = $fillColorPicker.data('SelectedColor'),
-                selectedShape = $shapeSelector.data('SelectedShape'),
-                strokeWeight = parseInt($('#stroke-weight').val()),
+            var selectedShape = environment.toolboxService.getSelectedTool(),
+                selectedStyle = environment.toolboxService.getSelectedStyle(),
                 newShape,
                 newShapeAnimation = Object.create(theater.Animation),
                 newX = evt.pageX - $canvas.offset().left,
@@ -3304,11 +3374,11 @@ $.fn.extend({
             switch (selectedShape) {
                 case 'Circle':
                     newShape = Object.create(theater.Circle);
-                    newShape.init(newX, newY, 50, { stroke: strokeColor, fill: fillColor, strokeWeight: strokeWeight });
+                    newShape.init(newX, newY, 50, selectedStyle);
                     break;
                 case 'Rectangle':
                     newShape = Object.create(theater.Rectangle);
-                    newShape.init(newX, newY, 75, 50, { stroke: strokeColor, fill: fillColor, strokeWeight: strokeWeight });
+                    newShape.init(newX, newY, 75, 50, selectedStyle);
                     break;
             }
 
@@ -3356,10 +3426,6 @@ $.fn.extend({
             }
         });
 
-        console.log('Initialising tools palette');
-        $('.color-picker').colorPicker();
-        $shapeSelector.shapeSelector();
-
         console.log('Initialising stage controls');
         $timer.timer();
         $('#stage-start').click(function() {
@@ -3390,56 +3456,3 @@ $.fn.extend({
     }
 
 })();
-(function() {
-
-    window.webscenator = { };
-
-})();
-(function() {
-
-    window.webscenator.services = { };
-
-})();
-
-(function($) {
-
-    window.webscenator.services.ToolboxService = {
-
-        init: function(environment) {
-            console.log('Initialising webscenator.services.ToolboxService');
-            this.environment = environment;
-        },
-
-        getSelectedTool: function() {
-            return;
-        },
-
-        getSelectedStyle: function() {
-            return;
-        },
-
-        destroy: function() {
-        }
-
-    };
-
-})(jQuery);
-
-(function($) {
-    var services = webscenator.services;
-
-    window.webscenator.Environment = {
-
-        init: function() {
-            console.log('Initialising Environment');
-            this.initaliseServices();
-        },
-
-        initaliseServices: function() {
-            this.toolboxService = Object.create(services.ToolboxService);
-            this.toolboxService.init(this);
-        }
-
-    };
-
-})(jQuery);
