@@ -1,6 +1,9 @@
 //= require <jquery-1.4.2>
 //= require "init"
 
+//= require "../../jquery/ColorPicker"
+//= require "../../jquery/ShapeSelector"
+
 (function($) {
     
     // Should provide all required toolbox info to requesters and is resposible for
@@ -13,11 +16,9 @@
             this.environment = environment;
 
             console.log(' Initialising ToolboxService UI');
-            this.$strokeColorPicker = $('#stroke-color');
-            this.$fillColorPicker = $('#fill-color');
-            this.$strokeWeight = $('#stroke-weight'),
-            $('.color-picker').colorPicker();
-            
+            this.$strokeColorPicker = $('#stroke-color').colorPicker();
+            this.$fillColorPicker = $('#fill-color').colorPicker();
+            this.$strokeWeight = $('#stroke-weight');
             this.$shapeSelector = $('#shapes').shapeSelector();
         },
         

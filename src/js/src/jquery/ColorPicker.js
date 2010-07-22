@@ -1,49 +1,48 @@
 //= require <jquery-1.4.2>
-//= require "../Object"
-//= require "../theater/Color"
+//= require <jquery.colorpicker/colorpicker>
+//= require <jquery.colorpicker/eye>
+//= require <jquery.colorpicker/utils>
+
+//= require "../Object.js
+//= require "../theater/Color.js
 
 (function($) {
 
     $.fn.colorPicker = function(options) {
-
+    
         options = $.extend($.fn.colorPicker.defaults, options);
-
+        
         return this.each(function() {
-
-            var $self = $(this),
-                color = selectColor($self.children(options.colorElementSelector + '.' + options.selectedClass).get());
-
-            $self.data('SelectedColor', color);
+            var selectedColor = Object.create(theater.Color),
+                $self = $(this);
             
-            $self.children(options.colorElementSelector).bind('click.colorPicker', function() {
-                $self.children('li').removeClass(options.selectedClass);
-                $(this).toggleClass(options.selectedClass);
-                $self.data('SelectedColor', selectColor(this));
-            });        
-            
-            function selectColor(el) {
-                var result = Object.create(theater.Color),
-                    $el = $(el);
+            selectedColor.init(0, 0, 255, 1.0);
+            $self.data('SelectedColor', selectedColor);
+            $(this).ColorPicker({
+                color: '#0000ff',
+                onShow: function (el) {
+                    $(el).fadeIn('fast');
+                    return false;
+                },
+                onHide: function (el) {
+                    $(el).fadeOut('fast');
+                    return false;
+                },
+                onChange: function (hsb, hex, rgb) {
+                    var color = Object.create(theater.Color);
+                    color.init(rgb.r, rgb.g, rgb.b, 1.0);
                     
-                if ($el.hasClass('cyan')) {
-                    result.init(25, 240, 252, 1.0);
-                } else if ($el.hasClass('lime')) {
-                    result.init(201, 255, 32);
-                } else if ($el.hasClass('orange')) {
-                    result.init(252, 90, 0, 1.0);
-                } else if ($el.hasClass('purple')) {
-                    result.init(243, 0, 252, 1.0);
+                    $self.data('SelectedColor', color);
+                    $self.find('div').css('backgroundColor', '#' + hex);
                 }
-                
-                return result;
-            }
-            
+            });        
+        
         });
+    
     };
     
     $.fn.colorPicker.defaults = {
-        colorElementSelector: 'li',
-        selectedClass: 'selected'
-    };
     
+    };
+
 })(jQuery);

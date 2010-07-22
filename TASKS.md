@@ -2,7 +2,6 @@ Immediate
 ---------
 
 # Create class to represent drawing surface, encapsulating stage
-# Create environment controller to coordinate communication between widgets (see below)
 # Fix Rectangle rendering bug (top left corner not joining)
 
 Mid-term

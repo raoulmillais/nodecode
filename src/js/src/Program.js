@@ -47,7 +47,7 @@
             switch (selectedShape) {
                 case 'Circle':
                     newShape = Object.create(theater.Circle);
-                    newShape.init(newX, newY, 50, selectedStyle);
+                    newShape.init(newX, newY, 50);
                     break;
                 case 'Rectangle':
                     newShape = Object.create(theater.Rectangle);

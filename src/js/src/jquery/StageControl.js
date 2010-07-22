@@ -1,6 +1,8 @@
 //= require <jquery-1.4.2>
 //= require "../theater/Stage"
 
+//= require "timer"
+
 (function($) {
 
     $.fn.stageControl = function(options) {
