@@ -16,8 +16,9 @@
             this.environment = environment;
 
             console.log(' Initialising ToolboxService UI');
-            this.$strokeColorPicker = $('#stroke-color').colorPicker();
-            this.$fillColorPicker = $('#fill-color').colorPicker();
+            this.$styleEditor = $('#style-palette .style-editor').styleEditor();
+            // this.$strokeColorPicker = $('#stroke-color').colorPicker();
+            // this.$fillColorPicker = $('#fill-color').colorPicker();
             this.$strokeWeight = $('#stroke-weight');
             this.$shapeSelector = $('#shapes').shapeSelector();
         },
@@ -27,11 +28,13 @@
         },
         
         getSelectedStyle: function() {
-            return {
-                stroke: this.$strokeColorPicker.data('SelectedColor'),
-                fill: this.$fillColorPicker.data('SelectedColor'),
-                strokeWeight: parseInt(this.$strokeWeight.val())
-            };
+            return this.$styleEditor.styleEditor('style');
+            
+            // {
+                // stroke: this.$strokeColorPicker.colorPicker('color'),
+                // fill: this.$fillColorPicker.colorPicker('color'),
+                // strokeWeight: parseInt(this.$strokeWeight.val())
+            // };
         },
         
         destroy: function() {

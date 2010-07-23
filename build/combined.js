@@ -928,40 +928,84 @@ if (!$.easing.easeout) {
 (function($) {
 
     $.fn.colorPicker = function(options) {
+        if (typeof options === 'string') {
+            var obj = this.data('ColorPicker'),
+                args,
+                action;
+
+            if (!obj) return $().eq(-1);
+
+            action = obj[options];
+
+            if (typeof action === 'function') {
+                args = Array.prototype.slice.call(arguments, 1);
+
+                return action.apply(obj, args);
+            } else {
+                return $().eq(-1);
+            }
+        }
 
         options = $.extend($.fn.colorPicker.defaults, options);
 
         return this.each(function() {
-            var selectedColor = Object.create(theater.Color),
-                $self = $(this);
+            var $self = $(this),
+                model = {
+                    init: function(el) {
+                        this.$context = el;
+                        this.$opacity = this.$context.find(options.opacitySelector);
+                        this.selectedColor = Object.create(theater.Color);
+                        this.selectedColor.init(0, 0, 255, this.opacity());
+                        this.$context.find(options.colorPickerSelector).ColorPicker({
+                            color: '#0000ff',
+                            onShow: function (el) {
+                                $(el).fadeIn('fast');
+                                return false;
+                            },
+                            onHide: function (el) {
+                                $(el).fadeOut('fast');
+                                return false;
+                            },
+                            onChange: function (hsb, hex, rgb) {
+                                var color = Object.create(theater.Color),
+                                    opacity = $self.data('ColorPicker').opacity();
 
-            selectedColor.init(0, 0, 255, 1.0);
-            $self.data('SelectedColor', selectedColor);
-            $(this).ColorPicker({
-                color: '#0000ff',
-                onShow: function (el) {
-                    $(el).fadeIn('fast');
-                    return false;
-                },
-                onHide: function (el) {
-                    $(el).fadeOut('fast');
-                    return false;
-                },
-                onChange: function (hsb, hex, rgb) {
-                    var color = Object.create(theater.Color);
-                    color.init(rgb.r, rgb.g, rgb.b, 1.0);
+                                color.init(rgb.r, rgb.g, rgb.b, opacity);
 
-                    $self.data('SelectedColor', color);
-                    $self.find('div').css('backgroundColor', '#' + hex);
-                }
-            });
+                                $self.data('ColorPicker').selectedColor = color;
+                                $self.find(options.colorPreviewSelector).css('backgroundColor', '#' + hex);
+                            }
+                        });
+
+                    },
+
+                    opacity: function() {
+                        return parseFloat(this.$opacity.val());
+                    },
+
+                    color: function() {
+                        return this.selectedColor;
+                    },
+
+                    destroy: function() {
+
+                    }
+                };
+
+                model.init($self);
+                $self.data('ColorPicker', model);
 
         });
 
     };
 
     $.fn.colorPicker.defaults = {
+        colorPickerSelector: '.color-picker',
+        opacitySelector: '.opacity',
+        colorPreviewSelector: 'div.color-preview'
+    };
 
+    $.colorPicker = function(color, options) {
     };
 
 })(jQuery);
@@ -3188,8 +3232,7 @@ $.Chain.extend('items', {
                 args = Array.prototype.slice.call(arguments, 1);
                 console.log('args: ' + args);
 
-                action.apply(obj, args);
-                return this;
+                return action.apply(obj, args);
             } else {
                 return $().eq(-1);
             }
@@ -3684,17 +3727,13 @@ $.fn.extend({
             action = obj[options];
 
             if (typeof action === 'function') {
-                console.log('timer action: ' +  options);
                 args = Array.prototype.slice.call(arguments, 1);
-                console.log('args: ' + args);
 
-                action.apply(obj, args);
-                return this;
+                return action.apply(obj, args);
             } else {
                 return $().eq(-1);
             }
         }
-
 
         options = $.extend($.fn.timer.defaults, options);
 
@@ -3712,7 +3751,6 @@ $.fn.extend({
                 originalColor: originalColor,
 
                 update: function(newMilliSeconds) {
-                    console.log('updating: ' + newMilliseconds);
                     var newMinutes = Math.floor(newMilliSeconds / 60000),
                         newSeconds = Math.floor((newMilliSeconds - (newMinutes * 60000)) / 1000),
                         newMilliseconds = newMilliSeconds - ((newSeconds * 1000) + (newMinutes * 60000));
@@ -3743,9 +3781,9 @@ $.fn.extend({
     };
 
     $.fn.timer.defaults = {
-        minutesSelector: '.minutes',
-        secondsSelector: '.seconds',
-        milliSecondsSelector: '.milliseconds',
+        minutesSelector: '.timer > .minutes',
+        secondsSelector: '.timer > .seconds',
+        milliSecondsSelector: '.timer > .milliseconds',
         startedClass: 'started'
     }
 
@@ -3787,11 +3825,78 @@ $.fn.extend({
     };
 
     $.fn.stageControl.defaults = {
-        timerSelector: '.timer',
+        timerSelector: '#stage-timer',
         startSelector: '.start',
         stopSelector: '.stop',
         rewindSelector: '.rewind',
         refreshSelector: '.refresh'
+    };
+
+})(jQuery);
+
+
+(function($) {
+
+    $.fn.styleEditor = function(options) {
+        if (typeof options === 'string') {
+            var obj = this.data('StyleEditor'),
+                args,
+                action;
+
+            if (!obj) return $().eq(-1);
+
+            action = obj[options];
+
+            if (typeof action === 'function') {
+                args = Array.prototype.slice.call(arguments, 1);
+
+                return action.apply(obj, args);
+            } else {
+                return $().eq(-1);
+            }
+        }
+
+        options = $.extend($.fn.styleEditor.defaults, options);
+
+        return this.each(function() {
+            var $self = $(this),
+                model = {
+                    init: function(el) {
+                        this.$context = el;
+                        this.$strokeColorPicker = this.$context.find(options.strokeColorSelector).colorPicker();
+                        this.$fillColorPicker = this.$context.find(options.fillColorSelector).colorPicker();
+                        this.$strokeWeight = this.$context.find(options.strokeWeightSelector);
+                    },
+
+                    style: function() {
+                        var selectedStyle = {};
+
+                        selectedStyle.stroke = this.$strokeColorPicker.colorPicker('color');
+                        selectedStyle.fill = this.$fillColorPicker.colorPicker('color');
+                        selectedStyle.strokeWeight = parseFloat(this.$strokeWeight.val());
+
+                        return selectedStyle;
+                    },
+
+                    destroy: function() {
+                        this.$strokeColorPicker.colorPicker('destroy');
+                        this.$fillColorPicker.colorPicker('destroy');
+                    }
+                };
+
+            $self.data('StyleEditor', model);
+            model.init($self);
+        });
+
+    };
+
+    $.fn.styleEditor.defaults = {
+        strokeColorSelector: '.stroke',
+        fillColorSelector: '.fill',
+        strokeWeightSelector: '.stroke-weight'
+    };
+
+    $.styleEditor = function(style, options) {
     };
 
 })(jQuery);
@@ -4106,8 +4211,7 @@ $.fn.extend({
             this.environment = environment;
 
             console.log(' Initialising ToolboxService UI');
-            this.$strokeColorPicker = $('#stroke-color').colorPicker();
-            this.$fillColorPicker = $('#fill-color').colorPicker();
+            this.$styleEditor = $('#style-palette .style-editor').styleEditor();
             this.$strokeWeight = $('#stroke-weight');
             this.$shapeSelector = $('#shapes').shapeSelector();
         },
@@ -4117,11 +4221,8 @@ $.fn.extend({
         },
 
         getSelectedStyle: function() {
-            return {
-                stroke: this.$strokeColorPicker.data('SelectedColor'),
-                fill: this.$fillColorPicker.data('SelectedColor'),
-                strokeWeight: parseInt(this.$strokeWeight.val())
-            };
+            return this.$styleEditor.styleEditor('style');
+
         },
 
         destroy: function() {
@@ -4169,6 +4270,8 @@ $.fn.extend({
         stage.init('tile-canvas', 20, 400);
 
         window.stage = stage;
+        window.environ = environment;
+
         redrawStage = function() {
             stage.draw();
         }

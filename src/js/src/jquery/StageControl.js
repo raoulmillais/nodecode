@@ -39,7 +39,7 @@
     };
     
     $.fn.stageControl.defaults = {
-        timerSelector: '.timer',
+        timerSelector: '#stage-timer',
         startSelector: '.start',
         stopSelector: '.stop',
         rewindSelector: '.rewind',

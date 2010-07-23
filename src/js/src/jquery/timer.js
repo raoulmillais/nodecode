@@ -14,17 +14,13 @@
             action = obj[options];
             
             if (typeof action === 'function') {
-                console.log('timer action: ' +  options);
                 args = Array.prototype.slice.call(arguments, 1);
-                console.log('args: ' + args);
 
-                action.apply(obj, args);
-                return this;
+                return action.apply(obj, args);
             } else {
                 return $().eq(-1);
             }
         }
-        
         
         options = $.extend($.fn.timer.defaults, options);
         
@@ -42,7 +38,6 @@
                 originalColor: originalColor,
                 
                 update: function(newMilliSeconds) {
-                    console.log('updating: ' + newMilliseconds);
                     var newMinutes = Math.floor(newMilliSeconds / 60000),
                         newSeconds = Math.floor((newMilliSeconds - (newMinutes * 60000)) / 1000),
                         newMilliseconds = newMilliSeconds - ((newSeconds * 1000) + (newMinutes * 60000));
@@ -73,9 +68,9 @@
     };
     
     $.fn.timer.defaults = {
-        minutesSelector: '.minutes',
-        secondsSelector: '.seconds',
-        milliSecondsSelector: '.milliseconds',
+        minutesSelector: '.timer > .minutes',
+        secondsSelector: '.timer > .seconds',
+        milliSecondsSelector: '.timer > .milliseconds',
         startedClass: 'started'
     }
 

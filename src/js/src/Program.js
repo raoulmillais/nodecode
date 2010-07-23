@@ -29,7 +29,10 @@
         // Initialise stage
         stage.init('tile-canvas', 20, 400);
         
+        // Export variables for debugging
         window.stage = stage;
+        window.environ = environment;
+        
         redrawStage = function() {
             stage.draw();
         }

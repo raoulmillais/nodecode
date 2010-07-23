@@ -17,8 +17,7 @@
                 args = Array.prototype.slice.call(arguments, 1);
                 console.log('args: ' + args);
 
-                action.apply(obj, args);
-                return this;
+                return action.apply(obj, args);
             } else {
                 return $().eq(-1);
             }

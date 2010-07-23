@@ -3,6 +3,14 @@ Immediate
 
 # Create class to represent drawing surface, encapsulating stage
 # Fix Rectangle rendering bug (top left corner not joining)
+# Reusable style editor widget
+
+# Abstract plugin creation logic
+# Reorderable items in project viewer
+# Groupable items in project viewer
+# Swappable tool handlers (for interacting with the editor)
+# Integrate opacity with 3rd party color picker plugin
+
 
 Mid-term
 --------
