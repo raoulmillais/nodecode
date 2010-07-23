@@ -52,7 +52,7 @@
                 <h3>Tools</h3>
                 <div class="content">
                     <div id="shape-selector">
-                        <ul id="shapes">
+                        <ul id="shapes" class="selectable">
                             <li id="shape-circle">Circle</li>
                             <li id="shape-rectangle" class="selected">Rectangle</li>
                         </ul>
@@ -63,22 +63,22 @@
             <div id="style-palette" class="slim palette">
                 <h3>Style</h3>
                 <div class="content">
-                    <div class="style-editor">
-                        <div id="stroke-color" class="stroke rgba-picker">
-                            <span>Stroke</span>
+                    <ul class="style-editor">
+                        <li id="stroke-color" class="stroke rgba-picker">
+                            <span class="property-label">Stroke</span>
                             <div class="color-picker"><div class="color-preview" style="background-color: #0000ff"></div></div>
                             <input id="stroke-opacity" class="property-value opacity" name="stroke-opacity" type="text" value="1" />
-                        </div>
-                        <div id="fill-color" class="fill rgba-picker">
-                            <span>Fill</span>
+                        </li>
+                        <li id="fill-color" class="fill rgba-picker">
+                            <span class="property-label">Fill</span>
                             <div class="color-picker"><div class="color-preview" style="background-color: #0000ff"></div></div>
                             <input id="fill-opacity" class="property-value opacity" name="fill-opacity" type="text" value="0.5" />
-                        </div>
-                        <p>
-                            <label for="stroke-weight" class="property-label">Stroke Weight</label>
+                        </li>
+                        <li class="stroke-weight-container">
+                            <label class="property-label">Weight</label>
                             <input id="stroke-weight" class="property-value stroke-weight" name="stroke-weight" type="text" value="3" />
-                        </p>
-                    </div>
+                        </li>
+                    </ul>
                 </div> <!-- content -->
             </div> <!-- style-palette -->
 
@@ -94,14 +94,9 @@
             <div id="project-viewer-palette" class="fat palette">
                 <h3>Project</h3>
                 <div class="content">
-                    <ul id="project-viewer">
+                    <ul id="project-viewer" class="selectable">
                         <li class="item">
                             <span class="name"></span>
-                            <ul class="animations">
-                                <li class="item">
-                                    <span class="startValue"></span>
-                                </li>
-                            </ul>
                         </li>
                     </ul>
                 </div> <!-- content -->

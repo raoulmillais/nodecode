@@ -94,19 +94,24 @@ a.jScrollActiveArrowButton:hover { /*background-color: #f00;*/ }
 .rgba-picker { clear: both; }
 .rgba-picker span, .rgba-picker .color-picker, .rgba-picker input { float: left; }
 
+.style-editor span { font-size: 11px; }
+.stroke-weight-container { clear: both; }
+
 /* COMPONENT: =properties-palette
 ------------------------------------------------------- */
-label.property-label { display: inline; width: 84px; font-size: 11px; }
+.property-label { display: inline; width: 74px; font-size: 11px; float: left; }
 input.property-value { height: 14px; font-size: 11px; width: 25px; }
 
 /* COMPONENT: =timeline-palette
 ------------------------------------------------------- */
 #timeline-palette p { clear: both; margin: 5px 0; overflow: auto; }
-label, .color-picker-label { display: block; width: 150px; float: left; padding-top: 2px;  }
+label, .color-picker-label { display: block; width: 150px; padding-top: 2px;  }
 input { width: 50px; display: block; float: left; text-align: bottom; margin: 0 5px;  border: 2px solid #252525; text-align: center; font-family:Helvetica,Verdana,Arial,sans-serif; font-size:14px; background: #656665}
 input.update { width: 75px; }
 #stage-time { width: 120px; }
 
-.palette li, .palette li { cursor: pointer; }
-.palette li.selected, .palette li.selected { background-color: #252525; color: #19191a; }
+/* COMPONENT: =selectable
+------------------------------------------------------- */
+.selectable li, .selectable li { cursor: pointer; }
+.selectable li.selected, .selectable li.selected { background-color: #252525; color: #19191a; }
 

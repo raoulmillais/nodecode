@@ -33,10 +33,17 @@
             var $self = $(this),
                 model = {
                     init: function(el) {
+                        var self = this;
+                        
                         this.$context = el;
                         this.$opacity = this.$context.find(options.opacitySelector);
                         this.selectedColor = Object.create(theater.Color);
                         this.selectedColor.init(0, 0, 255, this.opacity());
+                        
+                        this.$opacity.bind('change.ColorPicker', function() {
+                            self.triggerColorChanged.call(self);
+                        });
+                        
                         this.$context.find(options.colorPickerSelector).ColorPicker({
                             color: options.color,
                             onShow: function (el) {
@@ -49,15 +56,21 @@
                             },
                             onChange: function (hsb, hex, rgb) {
                                 var color = Object.create(theater.Color),
-                                    opacity = $self.data('ColorPicker').opacity();
+                                    opacity = self.opacity();
                                     
                                 color.init(rgb.r, rgb.g, rgb.b, opacity);
                                 
-                                $self.data('ColorPicker').selectedColor = color;
+                                self.selectedColor = color;
                                 $self.find(options.colorPreviewSelector).css('backgroundColor', '#' + hex);
+                                self.triggerColorChanged.call(self);
                             }
                         });        
                         
+                    },
+                    
+                    triggerColorChanged: function() {
+                        console.log('ColorPicker - triggering ColorChanged event');
+                        this.$context.trigger('ColorChanged', [ { newColor: this.color() } ]);
                     },
                     
                     opacity: function() {
@@ -69,7 +82,7 @@
                     },
                     
                     destroy: function() {
-                                        
+                        this.$opacity.unbind('.ColorPicker');     
                     }
                 };
                 
@@ -100,6 +113,7 @@
         var $container = $('<div></div>')
                             .addClass('rgba-picker'),
             $title = $('<span></span>')
+                        .addClass('property-label')
                         .text(options.title),
             $colorPreview = $('<div></div>')
                             .addClass('color-preview')

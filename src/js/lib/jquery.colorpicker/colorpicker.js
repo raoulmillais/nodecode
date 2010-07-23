@@ -93,7 +93,6 @@
 				setSelector(col, cal.get(0));
 				setHue(col, cal.get(0));
 				setNewColor(col, cal.get(0));
-                console.log(cal.data('colorpicker').onChange);
 				cal.data('colorpicker').onChange.call(cal, col, HSBToHex(col), HSBToRGB(col));
 			},
 			blur = function (ev) {

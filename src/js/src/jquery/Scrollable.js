@@ -25,8 +25,6 @@
         function initialiseJScrollPane(ctx) {
             return ctx.each(function() {
                 var $self = $(this);
-                console.log('  initialising scrollable');
-                console.log(this);
                 $self.jScrollPane({
                     scrollbarWidth: 5,
                     scrollbarMargin: 15,

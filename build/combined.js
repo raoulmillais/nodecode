@@ -247,7 +247,6 @@ e&&e.document?e.document.compatMode==="CSS1Compat"&&e.document.documentElement["
 				setSelector(col, cal.get(0));
 				setHue(col, cal.get(0));
 				setNewColor(col, cal.get(0));
-                console.log(cal.data('colorpicker').onChange);
 				cal.data('colorpicker').onChange.call(cal, col, HSBToHex(col), HSBToRGB(col));
 			},
 			blur = function (ev) {
@@ -952,10 +951,17 @@ if (!$.easing.easeout) {
             var $self = $(this),
                 model = {
                     init: function(el) {
+                        var self = this;
+
                         this.$context = el;
                         this.$opacity = this.$context.find(options.opacitySelector);
                         this.selectedColor = Object.create(theater.Color);
                         this.selectedColor.init(0, 0, 255, this.opacity());
+
+                        this.$opacity.bind('change.ColorPicker', function() {
+                            self.triggerColorChanged.call(self);
+                        });
+
                         this.$context.find(options.colorPickerSelector).ColorPicker({
                             color: options.color,
                             onShow: function (el) {
@@ -968,15 +974,21 @@ if (!$.easing.easeout) {
                             },
                             onChange: function (hsb, hex, rgb) {
                                 var color = Object.create(theater.Color),
-                                    opacity = $self.data('ColorPicker').opacity();
+                                    opacity = self.opacity();
 
                                 color.init(rgb.r, rgb.g, rgb.b, opacity);
 
-                                $self.data('ColorPicker').selectedColor = color;
+                                self.selectedColor = color;
                                 $self.find(options.colorPreviewSelector).css('backgroundColor', '#' + hex);
+                                self.triggerColorChanged.call(self);
                             }
                         });
 
+                    },
+
+                    triggerColorChanged: function() {
+                        console.log('ColorPicker - triggering ColorChanged event');
+                        this.$context.trigger('ColorChanged', [ { newColor: this.color() } ]);
                     },
 
                     opacity: function() {
@@ -988,7 +1000,7 @@ if (!$.easing.easeout) {
                     },
 
                     destroy: function() {
-
+                        this.$opacity.unbind('.ColorPicker');
                     }
                 };
 
@@ -1014,6 +1026,7 @@ if (!$.easing.easeout) {
         var $container = $('<div></div>')
                             .addClass('rgba-picker'),
             $title = $('<span></span>')
+                        .addClass('property-label')
                         .text(options.title),
             $colorPreview = $('<div></div>')
                             .addClass('color-preview')
@@ -3255,7 +3268,6 @@ $.Chain.extend('items', {
 
             if (typeof action === 'function') {
                 args = Array.prototype.slice.call(arguments, 1);
-                console.log('args: ' + args);
 
                 return action.apply(obj, args);
             } else {
@@ -3284,7 +3296,6 @@ $.Chain.extend('items', {
                 $container: $self,
 
                 add: function(item) {
-                    console.log('Item added: ' + item);
                     return this.$container.items('add', item);
                 },
 
@@ -3304,6 +3315,129 @@ $.Chain.extend('items', {
 
 })(jQuery);
 
+
+
+(function($) {
+
+    $.fn.styleEditor = function(options) {
+        if (typeof options === 'string') {
+            var obj = this.data('StyleEditor'),
+                args,
+                action;
+
+            if (!obj) return $().eq(-1);
+
+            action = obj[options];
+
+            if (typeof action === 'function') {
+                args = Array.prototype.slice.call(arguments, 1);
+
+                return action.apply(obj, args);
+            } else {
+                return $().eq(-1);
+            }
+        }
+
+        options = $.extend($.fn.styleEditor.defaults, options);
+
+        return this.each(function() {
+            var $self = $(this),
+                model = {
+                    init: function(el) {
+                        var self = this;
+
+                        this.$context = el;
+                        this.$strokeColorPicker = this.$context.find(options.strokeColorSelector);
+                        this.$fillColorPicker = this.$context.find(options.fillColorSelector);
+                        this.$strokeWeight = this.$context.find(options.strokeWeightSelector);
+
+                        if (!this.$strokeColorPicker.data('ColorPicker'))
+                            this.$strokeColorPicker.colorPicker();
+
+                        this.$strokeColorPicker.bind('ColorChanged', function(event, data) {
+                            self.triggerStyleChanged.call(self);
+                        });
+
+                        if (!this.$fillColorPicker.data('ColorPicker'))
+                            this.$fillColorPicker.colorPicker();
+
+                        this.$fillColorPicker.bind('ColorChanged.StyleEditor', function() {
+                            self.triggerStyleChanged.call(self);
+                        });
+
+                        this.$strokeWeight.bind('change.StyleEditor', function() {
+                            self.triggerStyleChanged.call(self);
+                        });
+                    },
+
+                    triggerStyleChanged: function() {
+                        this.$context.trigger('StyleChanged', { newStyle: this.style() });
+                    },
+
+                    style: function() {
+                        var selectedStyle = {};
+
+                        selectedStyle.stroke = this.$strokeColorPicker.colorPicker('color');
+                        selectedStyle.fill = this.$fillColorPicker.colorPicker('color');
+                        selectedStyle.strokeWeight = parseFloat(this.$strokeWeight.val());
+
+                        return selectedStyle;
+                    },
+
+                    destroy: function() {
+                        this.$strokeColorPicker.unbind('.StyleEditor');
+                        this.$fillColorPicker.unbind('.StyleEditor');
+                        this.$strokeWeight.unbind('.StyleEditor');
+
+                        this.$strokeColorPicker.colorPicker('destroy');
+                        this.$fillColorPicker.colorPicker('destroy');
+                    }
+                };
+
+            $self.data('StyleEditor', model);
+            model.init($self);
+        });
+
+    };
+
+    $.fn.styleEditor.defaults = {
+        strokeColorSelector: '.stroke',
+        fillColorSelector: '.fill',
+        strokeWeightSelector: '.stroke-weight'
+    };
+
+
+
+    $.styleEditor = function(style, options) {
+        options = $.extend($.fn.styleEditor.defaults, options);
+
+        var $container =  $('<div></div>')
+                            .addClass('style-editor'),
+            $strokeColor = $.colorPicker(style.stroke, { title: 'Stroke' })
+                            .addClass('stroke'),
+            $fillColor = $.colorPicker(style.fill, { title: 'Fill' })
+                            .addClass('fill'),
+            $strokeWeightContainer = $('<p class="stroke-weight-container"></p>'),
+            $strokeWeightLabel = $('<span></span>')
+                                    .addClass('property-label')
+                                    .text('Weight'),
+            $strokeWeight = $('<input></input>')
+                            .addClass('stroke-weight')
+                            .addClass('property-value')
+                            .attr('type', 'text')
+                            .val(style.strokeWeight);
+
+        return $container
+                .append($strokeColor)
+                .append($fillColor)
+                .append($strokeWeightContainer
+                        .append($strokeWeightLabel)
+                        .append($strokeWeight))
+                .styleEditor(options);;
+    };
+
+})(jQuery);
+
 (function($) {
 
     $.fn.propertiesEditor = function(options) {
@@ -3312,7 +3446,8 @@ $.Chain.extend('items', {
             $title = $('<h3></h3>').addClass(options.titleClass),
             $label,
             $item,
-            $edit;
+            $edit,
+            $styleEditor;
 
         options = $.extend($.fn.propertiesEditor.defaults, options);
 
@@ -3324,37 +3459,56 @@ $.Chain.extend('items', {
 
         $title.appendTo(this).html(options.title);
         for(var prop in options.model) {
-            if (typeof options.model[prop] !== 'function') {
-                $edit = $('<input></input>')
-                    .addClass(options.propertyValueClass)
-                    .attr('type', 'text')
-                    .attr('name', prop)
-                    .attr('value', options.model[prop]);
 
-                if (typeof options.model[prop] === 'object')
-                    $edit.attr('readonly', 'true');
+            var propType = typeof options.model[prop]
+                propName = prop;
 
-                $label = $('<label></labell>').attr('for', prop).addClass(options.propertyLabelClass).text(prop);
-                $item = $('<li></li>').css('clear', 'both');
-                $label.appendTo($item);
-                $edit.appendTo($item);
-                $item.appendTo($list);
+            switch (propType) {
+                case 'function':
+                    break;
+                case 'object':
+                    console.log('creating styleeditor for ' + propName);
+                    $item = $('<li></li>').css('clear', 'both');
+                    $styleEditor = $.styleEditor(options.model[propName], {});
+                    $item.append($styleEditor).appendTo($list);
 
-                if (typeof options.model[prop] !== 'object') {
+                    $styleEditor.bind('StyleChanged.PropertiesEditor', function(event, data) {
+                        options.model['style'] = data.newStyle;
+                        console.log(options.model);
+                        $.isFunction(options.propertyChange) && options.propertyChange.call($self);
+                    });
+                    break;
+                default:
+                    $edit = $('<input></input>')
+                        .addClass(options.propertyValueClass)
+                        .attr('type', 'text')
+                        .attr('name', prop)
+                        .attr('value', options.model[prop]);
+
+                    if (typeof options.model[prop] === 'object')
+                        $edit.attr('readonly', 'true');
+
+                    $label = $('<label></labell>').attr('for', prop).addClass(options.propertyLabelClass).text(prop);
+                    $item = $('<li></li>').css('clear', 'both');
+                    $label.appendTo($item);
+                    $edit.appendTo($item);
+                    $item.appendTo($list);
+
                     $edit.blur(function() {
                         var oldValue = options.model[this.name],
                             newValue = $(this).val();
 
                         if (newValue != oldValue) {
-                            console.log('Changing ' + this.name + ' to ' + newValue);
                             if (typeof oldValue === 'number') newValue = parseInt(newValue);
                             options.model[this.name] = newValue;
                         }
 
                         $.isFunction(options.propertyChange) && options.propertyChange.call($self);
                     });
-                }
+
+                    break;
             }
+
         }
 
         $list.appendTo(this);
@@ -3477,8 +3631,6 @@ $.fn.extend({
         function initialiseJScrollPane(ctx) {
             return ctx.each(function() {
                 var $self = $(this);
-                console.log('  initialising scrollable');
-                console.log(this);
                 $self.jScrollPane({
                     scrollbarWidth: 5,
                     scrollbarMargin: 15,
@@ -3860,73 +4012,6 @@ $.fn.extend({
     };
 
 })(jQuery);
-
-
-(function($) {
-
-    $.fn.styleEditor = function(options) {
-        if (typeof options === 'string') {
-            var obj = this.data('StyleEditor'),
-                args,
-                action;
-
-            if (!obj) return $().eq(-1);
-
-            action = obj[options];
-
-            if (typeof action === 'function') {
-                args = Array.prototype.slice.call(arguments, 1);
-
-                return action.apply(obj, args);
-            } else {
-                return $().eq(-1);
-            }
-        }
-
-        options = $.extend($.fn.styleEditor.defaults, options);
-
-        return this.each(function() {
-            var $self = $(this),
-                model = {
-                    init: function(el) {
-                        this.$context = el;
-                        this.$strokeColorPicker = this.$context.find(options.strokeColorSelector).colorPicker();
-                        this.$fillColorPicker = this.$context.find(options.fillColorSelector).colorPicker();
-                        this.$strokeWeight = this.$context.find(options.strokeWeightSelector);
-                    },
-
-                    style: function() {
-                        var selectedStyle = {};
-
-                        selectedStyle.stroke = this.$strokeColorPicker.colorPicker('color');
-                        selectedStyle.fill = this.$fillColorPicker.colorPicker('color');
-                        selectedStyle.strokeWeight = parseFloat(this.$strokeWeight.val());
-
-                        return selectedStyle;
-                    },
-
-                    destroy: function() {
-                        this.$strokeColorPicker.colorPicker('destroy');
-                        this.$fillColorPicker.colorPicker('destroy');
-                    }
-                };
-
-            $self.data('StyleEditor', model);
-            model.init($self);
-        });
-
-    };
-
-    $.fn.styleEditor.defaults = {
-        strokeColorSelector: '.stroke',
-        fillColorSelector: '.fill',
-        strokeWeightSelector: '.stroke-weight'
-    };
-
-    $.styleEditor = function(style, options) {
-    };
-
-})(jQuery);
 (function() {
     if (typeof Object.create !== 'function') {
         Object.create = function (o) {
@@ -4276,7 +4361,6 @@ $.fn.extend({
 
         getSelectedStyle: function() {
             return this.$styleEditor.styleEditor('style');
-
         },
 
         destroy: function() {
@@ -4341,7 +4425,7 @@ $.fn.extend({
             switch (selectedShape) {
                 case 'Circle':
                     newShape = Object.create(theater.Circle);
-                    newShape.init(newX, newY, 50);
+                    newShape.init(newX, newY, 50, selectedStyle);
                     break;
                 case 'Rectangle':
                     newShape = Object.create(theater.Rectangle);

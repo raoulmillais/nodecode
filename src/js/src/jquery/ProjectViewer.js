@@ -15,7 +15,6 @@
             
             if (typeof action === 'function') {
                 args = Array.prototype.slice.call(arguments, 1);
-                console.log('args: ' + args);
 
                 return action.apply(obj, args);
             } else {
@@ -44,7 +43,6 @@
                 $container: $self,
                 
                 add: function(item) {
-                    console.log('Item added: ' + item);
                     return this.$container.items('add', item);
                 },
                 
