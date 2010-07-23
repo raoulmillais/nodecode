@@ -122,11 +122,13 @@
             $title = $('<span></span>')
                         .addClass('property-label')
                         .text(options.title),
-            $transparencyViewer = $('<div></div>')
-                                    .addClass('transparency-viewer'),
+            $transparencyBackground = $('<div></div>')
+                                    .addClass('transparency-background'),
+            $transparencyViewer = $('<div></div>').addClass('transparency-viewer')
+                                    .css('background-color', color.toHexString())
+                                    .css('opacity', color.alpha),
             $colorPreview = $('<div></div>')
-                            .addClass('color-preview')
-                            .css('background-color', color.toHexString()),
+                            .addClass('color-preview'),
             $colorPicker = $('<div></div>')
                             .addClass('color-picker'),
             $opacity = $('<input></input>')
@@ -137,9 +139,10 @@
                         
         return $container
                 .append($title)
-                .append($transparencyViewer
-                            .append($colorPicker
-                                    .append($colorPreview)))
+                .append($colorPicker
+                        .append($transparencyBackground
+                            .append($transparencyViewer)
+                            .append($colorPreview)))
                 .append($opacity)
                 .colorPicker(options);
     };
