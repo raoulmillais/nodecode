@@ -26,6 +26,8 @@
             this.size = size;
             this.isRunning = false;
             this.time = 0;
+            
+            return this;
         },
         
         start: function() {

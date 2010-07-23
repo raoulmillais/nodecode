@@ -38,7 +38,7 @@
                         this.selectedColor = Object.create(theater.Color);
                         this.selectedColor.init(0, 0, 255, this.opacity());
                         this.$context.find(options.colorPickerSelector).ColorPicker({
-                            color: '#0000ff',
+                            color: options.color,
                             onShow: function (el) {
                                 $(el).fadeIn('fast');
                                 return false;
@@ -81,13 +81,42 @@
     };
     
     $.fn.colorPicker.defaults = {
+        title: '',
+        color: '#0000ff',
         colorPickerSelector: '.color-picker',
         opacitySelector: '.opacity',
         colorPreviewSelector: 'div.color-preview'
     };
-    
+
+    // <div class="stroke rgba-picker">
+        // <span>Stroke</span>
+        // <div class="color-picker"><div class="color-preview" style="background-color: #0000ff"></div></div>
+        // <input class="property-value opacity" name="stroke-opacity" type="text" value="1.0" />
+    // </div>
     $.colorPicker = function(color, options) {
-        // TODO: Build HTML for ColorPicker, initialise and return
+        options = $.extend($.fn.colorPicker.defaults, options);
+        options.color = color.toHexString();
+        
+        var $container = $('<div></div>')
+                            .addClass('rgba-picker'),
+            $title = $('<span></span>')
+                        .text(options.title),
+            $colorPreview = $('<div></div>')
+                            .addClass('color-preview')
+                            .css('background-color', color.toHexString()),
+            $colorPicker = $('<div></div>')
+                            .addClass('color-picker'),
+            $opacity = $('<input></input>')
+                        .addClass('opacity')
+                        .addClass('property-value')
+                        .attr('type', 'text')
+                        .val(color.alpha);
+                        
+        return $container
+                .append($title)
+                .append($colorPicker.append($colorPreview))
+                .append($opacity)
+                .colorPicker(options);
     };
 
 })(jQuery);

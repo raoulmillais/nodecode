@@ -957,7 +957,7 @@ if (!$.easing.easeout) {
                         this.selectedColor = Object.create(theater.Color);
                         this.selectedColor.init(0, 0, 255, this.opacity());
                         this.$context.find(options.colorPickerSelector).ColorPicker({
-                            color: '#0000ff',
+                            color: options.color,
                             onShow: function (el) {
                                 $(el).fadeIn('fast');
                                 return false;
@@ -1000,12 +1000,37 @@ if (!$.easing.easeout) {
     };
 
     $.fn.colorPicker.defaults = {
+        title: '',
+        color: '#0000ff',
         colorPickerSelector: '.color-picker',
         opacitySelector: '.opacity',
         colorPreviewSelector: 'div.color-preview'
     };
 
     $.colorPicker = function(color, options) {
+        options = $.extend($.fn.colorPicker.defaults, options);
+        options.color = color.toHexString();
+
+        var $container = $('<div></div>')
+                            .addClass('rgba-picker'),
+            $title = $('<span></span>')
+                        .text(options.title),
+            $colorPreview = $('<div></div>')
+                            .addClass('color-preview')
+                            .css('background-color', color.toHexString()),
+            $colorPicker = $('<div></div>')
+                            .addClass('color-picker'),
+            $opacity = $('<input></input>')
+                        .addClass('opacity')
+                        .addClass('property-value')
+                        .attr('type', 'text')
+                        .val(color.alpha);
+
+        return $container
+                .append($title)
+                .append($colorPicker.append($colorPreview))
+                .append($opacity)
+                .colorPicker(options);
     };
 
 })(jQuery);
@@ -3532,6 +3557,8 @@ $.fn.extend({
             this.size = size;
             this.isRunning = false;
             this.time = 0;
+
+            return this;
         },
 
         start: function() {
@@ -4051,6 +4078,8 @@ $.fn.extend({
             this.isRunning = false;
             this.revertOnStop = revertOnStop || false;
             this.easingFunction = easingFunction || Easing.linear;
+
+            return this;
         },
 
         start: function() {
@@ -4109,6 +4138,8 @@ $.fn.extend({
             this.green = green;
             this.blue = blue;
             this.alpha = alpha || 1;
+
+            return this;
         },
 
         toRGBAString: function() {
@@ -4117,8 +4148,23 @@ $.fn.extend({
 
         toRGBString: function() {
             return 'rgb(' + this.red + ',' + this.green + ',' + this.blue + ')';
-        }
+        },
 
+        toHexString: function() {
+            var hex = [
+                this.red.toString(16),
+                this.green.toString(16),
+                this.blue.toString(16)
+            ];
+
+            for (var i = 0, l = hex.length; i < l; i++) {
+                hex[i] = (hex[i].length == 1)
+                    ? '0' + hex[i]
+                    : hex[i];
+            }
+
+            return '#' + hex.join('');
+        }
     }
 
 })();
@@ -4132,6 +4178,8 @@ $.fn.extend({
             this.y = y;
             this.size = size;
             this.style = style;
+
+            return this;
         },
 
         draw: function(stage) {
@@ -4147,7 +4195,9 @@ $.fn.extend({
                 stage.context.fill();
             if (this.style.stroke.alpha != 0)
                 stage.context.stroke();
-            }
+
+            return this;
+        }
     };
 
 })();
@@ -4162,6 +4212,8 @@ $.fn.extend({
             this.width = width;
             this.height = height;
             this.style = style;
+
+            return this;
         },
 
         draw: function(stage) {
@@ -4183,6 +4235,8 @@ $.fn.extend({
                 stage.context.fill();
             if (this.style.stroke.alpha != 0)
                 stage.context.stroke();
+
+            return this;
         }
     };
 
@@ -4351,6 +4405,8 @@ $.fn.extend({
         init: function(strokeColor, fillColor) {
             this.strokeColor = strokeColor;
             this.fillColor = fillColor;
+
+            return this;
         }
 
     }

@@ -10,6 +10,8 @@
             this.y = y;
             this.size = size;
             this.style = style;
+            
+            return this;
         },
     
         draw: function(stage) {
@@ -25,7 +27,9 @@
                 stage.context.fill();
             if (this.style.stroke.alpha != 0)
                 stage.context.stroke();
-            }
+        
+            return this;
+        }
     };
     
 })();

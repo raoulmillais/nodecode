@@ -21,6 +21,8 @@
             this.isRunning = false;
             this.revertOnStop = revertOnStop || false;
             this.easingFunction = easingFunction || Easing.linear;
+            
+            return this;
         },
         
         start: function() {

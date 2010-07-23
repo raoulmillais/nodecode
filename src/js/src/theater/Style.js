@@ -7,6 +7,8 @@
         init: function(strokeColor, fillColor) {
             this.strokeColor = strokeColor;
             this.fillColor = fillColor;
+            
+            return this;
         }
     
     }
