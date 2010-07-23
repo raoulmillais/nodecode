@@ -37,10 +37,17 @@
                         
                         this.$context = el;
                         this.$opacity = this.$context.find(options.opacitySelector);
+                        this.$transparencyViewer = $self.find(options.transparencyViewerSelector);
+                        this.$colorPreview = $self.find(options.colorPreviewSelector);
                         this.selectedColor = Object.create(theater.Color);
                         this.selectedColor.init(0, 0, 255, this.opacity());
                         
+                        this.$transparencyViewer.css('opacity', this.opacity());
+                        
+                        this.$transparencyViewer.css('backgroundColor', this.selectedColor.toHexString());
+                        
                         this.$opacity.bind('change.ColorPicker', function() {
+                            self.$transparencyViewer.css('opacity', self.$opacity.val());
                             self.triggerColorChanged.call(self);
                         });
                         
@@ -61,7 +68,7 @@
                                 color.init(rgb.r, rgb.g, rgb.b, opacity);
                                 
                                 self.selectedColor = color;
-                                $self.find(options.colorPreviewSelector).css('backgroundColor', '#' + hex);
+                                self.$transparencyViewer.css('backgroundColor', '#' + hex);
                                 self.triggerColorChanged.call(self);
                             }
                         });        
@@ -69,7 +76,6 @@
                     },
                     
                     triggerColorChanged: function() {
-                        console.log('ColorPicker - triggering ColorChanged event');
                         this.$context.trigger('ColorChanged', [ { newColor: this.color() } ]);
                     },
                     
@@ -98,7 +104,8 @@
         color: '#0000ff',
         colorPickerSelector: '.color-picker',
         opacitySelector: '.opacity',
-        colorPreviewSelector: 'div.color-preview'
+        colorPreviewSelector: 'div.color-preview',
+        transparencyViewerSelector: 'div.transparency-viewer'
     };
 
     // <div class="stroke rgba-picker">
@@ -115,6 +122,8 @@
             $title = $('<span></span>')
                         .addClass('property-label')
                         .text(options.title),
+            $transparencyViewer = $('<div></div>')
+                                    .addClass('transparency-viewer'),
             $colorPreview = $('<div></div>')
                             .addClass('color-preview')
                             .css('background-color', color.toHexString()),
@@ -128,7 +137,9 @@
                         
         return $container
                 .append($title)
-                .append($colorPicker.append($colorPreview))
+                .append($transparencyViewer
+                            .append($colorPicker
+                                    .append($colorPreview)))
                 .append($opacity)
                 .colorPicker(options);
     };
